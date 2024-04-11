@@ -103,6 +103,81 @@ border: none;</string>
      <string>◉</string>
     </property>
    </widget>
+   <widget class="QLabel" name="battery1">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>550</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery2">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>560</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery3">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>570</y>
+      <width>31</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery_top">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>545</y>
+      <width>9</width>
+      <height>10</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>battery_top</zorder>
+   <zorder>blue_light</zorder>
+   <zorder>green_light</zorder>
+   <zorder>red_light</zorder>
+   <zorder>powerButton</zorder>
+   <zorder>battery1</zorder>
+   <zorder>battery2</zorder>
+   <zorder>battery3</zorder>
   </widget>
  </widget>
  <resources/>
