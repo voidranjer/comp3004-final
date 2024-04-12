@@ -7,7 +7,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->powerButton, SIGNAL(released()), this, SLOT (powerButtonClicked()));
-    changeMachineState(false);
+    connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
+
+    changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
 }
 
 MainWindow::~MainWindow()
@@ -15,16 +17,21 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::changeMachineState(bool isOn)
+void MainWindow::changeMachineState()
 {
-    QList<QLabel*> elements = {ui->battery1, ui->battery2, ui->battery3, ui->battery_top};
+    isOn = !isOn;
+    QList<QWidget*> elements = {ui->battery1, ui->battery2, ui->battery3, ui->battery_top, ui->break_contact};
 
-    for (QLabel* element : elements) {
+    for (QWidget* element : elements) {
         if (isOn) {
             element->show();
         } else {
             element->hide();
         }
+    }
+
+    if (!isOn && inContact) {
+        breakContact();
     }
 }
 
@@ -53,12 +60,23 @@ void MainWindow::powerButtonClicked()
 
     if (button->palette().color(QPalette::ButtonText) == Qt::red) {
         button->setStyleSheet("QPushButton {color: blue; border: none;}");
-        changeMachineState(false);
+        changeMachineState();
     } else {
         button->setStyleSheet("QPushButton {color: red; border: none;}");
-        changeMachineState(true);
+        changeMachineState();
     }
+}
 
-//    reduceBattery();
+void MainWindow::breakContact()
+{
+    inContact = !inContact;
+
+    if (inContact) {
+        ui->blue_light->setStyleSheet("background-color: blue;");
+        ui->break_contact->setText("Break Contact");
+    } else {
+        ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
+        ui->break_contact->setText("Make Contact");
+    }
 }
 

@@ -18,14 +18,17 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void changeMachineState(bool isOn);
+    void changeMachineState();
     void reduceBattery();
 
 public slots:
     void powerButtonClicked();
+    void breakContact();
 
 private:
     Ui::MainWindow *ui;
     bool outOfBattery = false;
+    bool isOn = true; // will go to false when program is setting up
+    bool inContact = false;
 };
 #endif // MAINWINDOW_H
