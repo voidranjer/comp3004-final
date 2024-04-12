@@ -17,8 +17,11 @@ private:
      */
     QDateTime timeOfSetting; // to store the time when the device datetime was set
     QDateTime baseDatetime = QDateTime::currentDateTime(); // to store the custom time that the user sets
-
+    void tickTime(); // tick the clock
 signals:
+    void timeChanged(QDateTime datetime); // emitted every second
+public slots:
+
 };
 
 #endif // NEURESETCONTROLLER_H

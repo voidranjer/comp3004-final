@@ -90,7 +90,6 @@ border: 3px solid red;</string>
      <font>
       <family>DejaVu Sans</family>
       <pointsize>20</pointsize>
-      <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
      </font>
@@ -247,6 +246,31 @@ border: 1px solid black;</string>
      <string>End Session</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="datetimeDisplay">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>550</y>
+      <width>241</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Monaco</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>CLOCK</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
    <zorder>battery_top</zorder>
    <zorder>blue_light</zorder>
    <zorder>green_light</zorder>
@@ -260,6 +284,7 @@ border: 1px solid black;</string>
    <zorder>past_session</zorder>
    <zorder>change_date</zorder>
    <zorder>end_session</zorder>
+   <zorder>datetimeDisplay</zorder>
   </widget>
  </widget>
  <resources/>

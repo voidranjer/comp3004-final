@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <neuresetcontroller.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,6 +11,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
     connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
     connect(ui->end_session, SIGNAL(released()), this, SLOT (endSession()));
+
+    // Clock
+    NeuresetController *controller = new NeuresetController(this); // todo: move to header file
+    connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](){ ui->datetimeDisplay->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));});
 
     changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
 }
@@ -22,7 +27,12 @@ MainWindow::~MainWindow()
 void MainWindow::changeMachineState()
 {
     isOn = !isOn;
-    QList<QWidget*> elements = {ui->battery1, ui->battery2, ui->battery3, ui->battery_top, ui->break_contact, ui->start_session, ui->past_session, ui->change_date};
+    QList<QWidget *> elements = {ui->battery1,      ui->battery2,
+                                 ui->battery3,      ui->battery_top,
+                                 ui->break_contact, ui->start_session,
+                                 ui->past_session,  ui->change_date,
+                                 ui->datetimeDisplay
+    };
 
     for (QWidget* element : elements) {
         if (isOn) {

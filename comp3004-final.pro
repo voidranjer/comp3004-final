@@ -14,6 +14,7 @@ SOURCES += \
     neuresetcontroller.cpp
 
 HEADERS += \
+    defs.h \
     mainwindow.h \
     neuresetcontroller.h
 
