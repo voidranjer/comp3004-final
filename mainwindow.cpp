@@ -72,6 +72,12 @@ void MainWindow::giveTreatment()
 
 void MainWindow::powerButtonClicked()
 {
+    if (outOfBattery) {
+        flashBatteries();
+
+        return;
+    }
+
     QPushButton* button = ui->powerButton;
 
     if (button->palette().color(QPalette::ButtonText) == Qt::red) {
@@ -109,6 +115,36 @@ void MainWindow::loopChangeRedLight() {
     QTimer::singleShot(2000, this, &MainWindow::loopChangeRedLight);
 }
 
+void MainWindow::flashBatteries()
+{
+    ui->battery_top->show();
+    ui->battery1->show();
+    ui->battery2->show();
+    ui->battery3->show();
+
+    QTimer::singleShot(1000, this, [=]() {
+        ui->battery_top->hide();
+        ui->battery1->hide();
+        ui->battery2->hide();
+        ui->battery3->hide();
+
+        QTimer::singleShot(500, this, [=]() {
+            ui->battery_top->show();
+            ui->battery1->show();
+            ui->battery2->show();
+            ui->battery3->show();
+
+            QTimer::singleShot(1000, this, [=]() {
+                ui->battery_top->hide();
+                ui->battery1->hide();
+                ui->battery2->hide();
+                ui->battery3->hide();
+            });
+        });
+    });
+}
+
+
 void MainWindow::changeRedLight() {
     ui->red_light->setStyleSheet("background-color: red;");
 
@@ -119,6 +155,10 @@ void MainWindow::changeRedLight() {
 
 void MainWindow::startSession()
 {
+    if (outOfBattery) {
+        powerButtonClicked();
+        return;
+    }
     inSession = true;
     QList<QWidget*> elements = {ui->start_session, ui->past_session, ui->change_date};
 

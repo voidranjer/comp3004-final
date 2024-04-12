@@ -30,12 +30,13 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    bool outOfBattery = false;
+    bool outOfBattery = true;
     bool isOn = true; // will go to false when program is setting up
     bool inContact = false;
     bool inSession = false;
     void changeRedLight();
     void loopChangeRedLight();
+    void flashBatteries();
 
 };
 #endif // MAINWINDOW_H
