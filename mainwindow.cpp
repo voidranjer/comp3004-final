@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->powerButton, SIGNAL(released()), this, SLOT (powerButtonClicked()));
     connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
     connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
+    connect(ui->end_session, SIGNAL(released()), this, SLOT (endSession()));
 
     changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
 }
@@ -30,6 +31,13 @@ void MainWindow::changeMachineState()
             element->hide();
         }
     }
+
+    if (inSession) {
+        inSession = false;
+        reduceBattery();
+    }
+
+    ui->end_session->hide();
 
     if (!isOn) {
         ui->start_session->setEnabled(false);
@@ -74,8 +82,11 @@ void MainWindow::powerButtonClicked()
 {
     if (outOfBattery) {
         flashBatteries();
+        ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
 
-        return;
+        if (!isOn) {
+            return;
+        }
     }
 
     QPushButton* button = ui->powerButton;
@@ -90,6 +101,11 @@ void MainWindow::powerButtonClicked()
 }
 
 void MainWindow::breakContact() {
+    if (outOfBattery) {
+        powerButtonClicked();
+        return;
+    }
+
     inContact = !inContact;
 
     if (inContact) {
@@ -122,7 +138,7 @@ void MainWindow::flashBatteries()
     ui->battery2->show();
     ui->battery3->show();
 
-    QTimer::singleShot(1000, this, [=]() {
+    QTimer::singleShot(500, this, [=]() {
         ui->battery_top->hide();
         ui->battery1->hide();
         ui->battery2->hide();
@@ -134,7 +150,7 @@ void MainWindow::flashBatteries()
             ui->battery2->show();
             ui->battery3->show();
 
-            QTimer::singleShot(1000, this, [=]() {
+            QTimer::singleShot(650, this, [=]() {
                 ui->battery_top->hide();
                 ui->battery1->hide();
                 ui->battery2->hide();
@@ -159,12 +175,28 @@ void MainWindow::startSession()
         powerButtonClicked();
         return;
     }
+
     inSession = true;
     QList<QWidget*> elements = {ui->start_session, ui->past_session, ui->change_date};
 
     for (QWidget* element : elements) {
         element->hide();
-
     }
+
+    ui->end_session->show();
+}
+
+void MainWindow::endSession()
+{
+    inSession = false;
+    reduceBattery();
+
+    QList<QWidget*> elements = {ui->start_session, ui->past_session, ui->change_date};
+
+    for (QWidget* element : elements) {
+        element->show();
+    }
+
+    ui->end_session->hide();
 }
 

@@ -234,6 +234,19 @@ border: 1px solid black;</string>
      <string>Change Date and Time</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="end_session">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>150</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>End Session</string>
+    </property>
+   </widget>
    <zorder>battery_top</zorder>
    <zorder>blue_light</zorder>
    <zorder>green_light</zorder>
@@ -246,6 +259,7 @@ border: 1px solid black;</string>
    <zorder>start_session</zorder>
    <zorder>past_session</zorder>
    <zorder>change_date</zorder>
+   <zorder>end_session</zorder>
   </widget>
  </widget>
  <resources/>
