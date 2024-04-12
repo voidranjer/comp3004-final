@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(ui->powerButton, SIGNAL(released()), this, SLOT (powerButtonClicked()));
     connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
+    connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
 
     changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
 }
@@ -20,7 +21,7 @@ MainWindow::~MainWindow()
 void MainWindow::changeMachineState()
 {
     isOn = !isOn;
-    QList<QWidget*> elements = {ui->battery1, ui->battery2, ui->battery3, ui->battery_top, ui->break_contact};
+    QList<QWidget*> elements = {ui->battery1, ui->battery2, ui->battery3, ui->battery_top, ui->break_contact, ui->start_session, ui->past_session, ui->change_date};
 
     for (QWidget* element : elements) {
         if (isOn) {
@@ -30,8 +31,12 @@ void MainWindow::changeMachineState()
         }
     }
 
-    if (!isOn && inContact) {
-        breakContact();
+    if (!isOn) {
+        ui->start_session->setEnabled(false);
+
+        if (inContact) {
+            breakContact();
+        }
     }
 }
 
@@ -54,6 +59,17 @@ void MainWindow::reduceBattery()
     outOfBattery = true;
 }
 
+void MainWindow::giveTreatment()
+{
+    ui->green_light->setStyleSheet("background-color: green;");
+
+    QTimer::singleShot(1500, [=]() {
+        ui->green_light->setStyleSheet("background-color: white; border: 3px solid green;");
+    });
+
+    // Add other logic for changes calculations and whatnot if needed (to show difference after treatment)
+}
+
 void MainWindow::powerButtonClicked()
 {
     QPushButton* button = ui->powerButton;
@@ -67,16 +83,48 @@ void MainWindow::powerButtonClicked()
     }
 }
 
-void MainWindow::breakContact()
-{
+void MainWindow::breakContact() {
     inContact = !inContact;
 
     if (inContact) {
         ui->blue_light->setStyleSheet("background-color: blue;");
         ui->break_contact->setText("Break Contact");
+        ui->start_session->setEnabled(true);
     } else {
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
         ui->break_contact->setText("Make Contact");
+        ui->start_session->setEnabled(false);
+        if (inSession) {
+            loopChangeRedLight();
+        }
+    }
+}
+
+void MainWindow::loopChangeRedLight() {
+    if (!inSession || inContact || !isOn) {
+        return;
+    }
+    changeRedLight();
+
+    QTimer::singleShot(2000, this, &MainWindow::loopChangeRedLight);
+}
+
+void MainWindow::changeRedLight() {
+    ui->red_light->setStyleSheet("background-color: red;");
+
+    QTimer::singleShot(1000, [=]() {
+        ui->red_light->setStyleSheet("background-color: white; border: 3px solid red;");
+    });
+}
+
+void MainWindow::startSession()
+{
+    inSession = true;
+    QList<QWidget*> elements = {ui->start_session, ui->past_session, ui->change_date};
+
+    for (QWidget* element : elements) {
+        element->hide();
+
     }
 }
 

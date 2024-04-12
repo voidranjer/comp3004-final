@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include <QDebug>
-
+#include <QTimer>
+#include <QThread>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,15 +21,21 @@ public:
     ~MainWindow();
     void changeMachineState();
     void reduceBattery();
+    void giveTreatment();
 
 public slots:
     void powerButtonClicked();
     void breakContact();
+    void startSession();
 
 private:
     Ui::MainWindow *ui;
     bool outOfBattery = false;
     bool isOn = true; // will go to false when program is setting up
     bool inContact = false;
+    bool inSession = false;
+    void changeRedLight();
+    void loopChangeRedLight();
+
 };
 #endif // MAINWINDOW_H
