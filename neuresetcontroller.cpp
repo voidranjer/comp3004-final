@@ -1,5 +1,6 @@
 #include "neuresetcontroller.h"
 #include <QTimer>
+#include <QDebug>
 #include "defs.h"
 
 NeuresetController::NeuresetController(QObject *parent)
@@ -17,5 +18,14 @@ void NeuresetController::tickTime()
     // To calculate the device datetime, take (QDateTime::currentDateTime() - timeOfSetting + baseDatetime)
     qint64 secondsElapsed = timeOfSetting.secsTo(QDateTime::currentDateTime());
     QDateTime currDatetime = baseDatetime.addSecs(secondsElapsed);
+
     emit timeChanged(currDatetime);
+}
+
+void NeuresetController::setDatetime(QDateTime datetime)
+{
+    timeOfSetting = QDateTime::currentDateTime();
+    baseDatetime = datetime;
+
+    qDebug() << "Controller: Updated time setting!";
 }

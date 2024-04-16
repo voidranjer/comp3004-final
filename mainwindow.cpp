@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Clock
     NeuresetController *controller = new NeuresetController(this); // todo: move to header file
-    connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](){ ui->datetimeDisplay->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));});
+    connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](QDateTime datetime){ ui->datetimeDisplay->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));});
+    connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, controller, &NeuresetController::setDatetime);
 
     changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
 }

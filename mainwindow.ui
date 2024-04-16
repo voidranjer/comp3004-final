@@ -271,6 +271,16 @@ border: 1px solid black;</string>
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QDateTimeEdit" name="dateTimeEdit">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>80</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>battery_top</zorder>
    <zorder>blue_light</zorder>
    <zorder>green_light</zorder>
@@ -285,6 +295,7 @@ border: 1px solid black;</string>
    <zorder>change_date</zorder>
    <zorder>end_session</zorder>
    <zorder>datetimeDisplay</zorder>
+   <zorder>dateTimeEdit</zorder>
   </widget>
  </widget>
  <resources/>
