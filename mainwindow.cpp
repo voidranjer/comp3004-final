@@ -12,12 +12,35 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
     connect(ui->end_session, SIGNAL(released()), this, SLOT (endSession()));
 
-    // Clock
-    NeuresetController *controller = new NeuresetController(this); // todo: move to header file
-    connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](QDateTime datetime){ ui->datetimeDisplay->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));});
-    connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, controller, &NeuresetController::setDatetime);
-
     changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
+
+    NeuresetController *controller = new NeuresetController(this); // todo: move to header file
+
+    // CLOCK: Tick the clock
+    connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](QDateTime datetime){ ui->datetimeDisplay->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));});
+
+    // CLOCK: Update the time picker when first enabling the clock settings page
+    connect(ui->tabs, &QTabWidget::currentChanged, ui->dateTimeEdit,
+            [this, controller](int tabIndex) {
+              // if (tabIndex != 2) return;
+              ui->dateTimeEdit->setDateTime(controller->getDatetime());
+            });
+
+    // CLOCK: TODO - aekus
+    // connect(ui->change_date, &QPushButton::released, controller, &NeuresetController::toggleClockSetting);
+    // connect(controller, &NeuresetController::clockSettingActiveChanged,
+    //         ui->clockSettings, [this](bool active) {
+    //             if (active) {
+    //                 ui->clockSettings->show();
+    //             } else {
+    //                 ui->clockSettings->hide();
+    //             }
+    //         });
+
+    // CLOCK: Event handler for set_time button
+    connect(ui->set_time, &QPushButton::released, controller, [this, controller](){
+        controller->setDatetime(ui->dateTimeEdit->dateTime());
+    });
 }
 
 MainWindow::~MainWindow()
@@ -28,19 +51,25 @@ MainWindow::~MainWindow()
 void MainWindow::changeMachineState()
 {
     isOn = !isOn;
-    QList<QWidget *> elements = {ui->battery1,      ui->battery2,
-                                 ui->battery3,      ui->battery_top,
-                                 ui->break_contact, ui->start_session,
-                                 ui->past_session,  ui->change_date,
-                                 ui->datetimeDisplay
-    };
+    // QList<QWidget *> elements = {ui->battery1,      ui->battery2,
+    //                              ui->battery3,      ui->battery_top,
+    //                              ui->break_contact, ui->start_session,
+    //                              ui->past_session,  ui->change_date,
+    //                              ui->datetimeDisplay
+    // };
 
-    for (QWidget* element : elements) {
-        if (isOn) {
-            element->show();
-        } else {
-            element->hide();
-        }
+    // for (QWidget* element : elements) {
+    //     if (isOn) {
+    //         element->show();
+    //     } else {
+    //         element->hide();
+    //     }
+    // }
+
+    if (isOn) {
+        ui->neuresetBox->show();
+    } else {
+        ui->neuresetBox->hide();
     }
 
     if (inSession) {
