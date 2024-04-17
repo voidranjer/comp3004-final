@@ -7,6 +7,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // Show pc window
+    pcWindow = new PCWindow(this);
+    pcWindow->show();
+
     connect(ui->powerButton, SIGNAL(released()), this, SLOT (powerButtonClicked()));
     connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
     connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
@@ -22,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     // CLOCK: Update the time picker when first enabling the clock settings page
     connect(ui->tabs, &QTabWidget::currentChanged, ui->dateTimeEdit,
             [this, controller](int tabIndex) {
-              // if (tabIndex != 2) return;
+              // if (tabIndex != 2) return; (trying to not hard code for now, at the cost of efficiency)
               ui->dateTimeEdit->setDateTime(controller->getDatetime());
             });
 

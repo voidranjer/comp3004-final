@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Neureset Device</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -214,7 +214,7 @@ border: none;</string>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -243,41 +243,28 @@ border: none;</string>
       <attribute name="title">
        <string>Set Clock</string>
       </attribute>
-      <widget class="QGroupBox" name="clockSettings">
+      <widget class="QDateTimeEdit" name="dateTimeEdit">
        <property name="geometry">
         <rect>
-         <x>130</x>
-         <y>20</y>
-         <width>281</width>
-         <height>221</height>
+         <x>160</x>
+         <y>40</y>
+         <width>191</width>
+         <height>31</height>
         </rect>
        </property>
-       <property name="title">
-        <string>Clock Settings</string>
+      </widget>
+      <widget class="QPushButton" name="set_time">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>130</y>
+         <width>121</width>
+         <height>51</height>
+        </rect>
        </property>
-       <widget class="QDateTimeEdit" name="dateTimeEdit">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>40</y>
-          <width>191</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="set_time">
-        <property name="geometry">
-         <rect>
-          <x>80</x>
-          <y>150</y>
-          <width>121</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Set Clock</string>
-        </property>
-       </widget>
+       <property name="text">
+        <string>Set Clock</string>
+       </property>
       </widget>
      </widget>
     </widget>

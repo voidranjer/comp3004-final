@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QThread>
+#include "pcwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,6 +39,7 @@ private:
     void reduceBattery();
     void changeMachineState();
     void giveTreatment();
+    PCWindow *pcWindow;
 
 };
 #endif // MAINWINDOW_H
