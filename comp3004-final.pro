@@ -1,6 +1,6 @@
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17
 
@@ -11,18 +11,22 @@ CONFIG += c++17
 SOURCES += \
     battery.cpp \
     logentry.cpp \
+    eegsimulator.cpp \
     main.cpp \
     mainwindow.cpp \
     neuresetcontroller.cpp \
+    qcustomplot.cpp \
     pcwindow.cpp
 
 HEADERS += \
     battery.h \
     defs.h \
     logentry.h \
+    eegsimulator.h \
     mainwindow.h \
     neuresetcontroller.h \
-    pcwindow.h
+    pcwindow.h \
+    qcustomplot.h
 
 FORMS += \
     mainwindow.ui \
