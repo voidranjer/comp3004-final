@@ -90,7 +90,6 @@ border: 3px solid red;</string>
      <font>
       <family>DejaVu Sans</family>
       <pointsize>20</pointsize>
-      <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
      </font>
@@ -215,23 +214,30 @@ border: none;</string>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>New Session</string>
       </attribute>
-      <widget class="QLabel" name="label">
+      <widget class="QCustomPlot" name="customPlot" native="true">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>70</y>
-         <width>451</width>
-         <height>121</height>
+         <x>10</x>
+         <y>10</y>
+         <width>491</width>
+         <height>231</height>
         </rect>
        </property>
-       <property name="text">
-        <string>note: make sure to disable changing tabs when a session is in progress</string>
+      </widget>
+      <widget class="QComboBox" name="comboBox">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>250</y>
+         <width>131</width>
+         <height>32</height>
+        </rect>
        </property>
       </widget>
      </widget>
@@ -268,6 +274,19 @@ border: none;</string>
        </property>
       </widget>
      </widget>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>380</y>
+       <width>451</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>note: make sure to disable changing tabs when a session is in progress</string>
+     </property>
     </widget>
    </widget>
    <widget class="QLabel" name="battery3">
@@ -351,6 +370,14 @@ border: 1px solid black;</string>
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
