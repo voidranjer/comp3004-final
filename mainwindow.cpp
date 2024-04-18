@@ -117,8 +117,6 @@ void MainWindow::giveTreatment()
     QTimer::singleShot(1500, [=]() {
         ui->green_light->setStyleSheet("background-color: white; border: 3px solid green;");
     });
-
-    // Add other logic for changes calculations and whatnot if needed (to show difference after treatment)
 }
 
 void MainWindow::powerButtonClicked()
