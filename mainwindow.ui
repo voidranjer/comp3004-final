@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Neureset Device</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -90,7 +90,6 @@ border: 3px solid red;</string>
      <font>
       <family>DejaVu Sans</family>
       <pointsize>20</pointsize>
-      <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
      </font>
@@ -107,7 +106,7 @@ border: none;</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
+      <y>40</y>
       <width>771</width>
       <height>531</height>
      </rect>
@@ -221,38 +220,25 @@ border: none;</string>
       <attribute name="title">
        <string>New Session</string>
       </attribute>
-      <widget class="QLabel" name="label">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>70</y>
-         <width>451</width>
-         <height>121</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>note: make sure to disable changing tabs when a session is in progress</string>
-       </property>
-      </widget>
       <widget class="QCustomPlot" name="customPlot" native="true">
        <property name="geometry">
         <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>521</width>
-         <height>281</height>
+         <x>10</x>
+         <y>10</y>
+         <width>491</width>
+         <height>231</height>
         </rect>
        </property>
-       <widget class="QComboBox" name="comboBox">
-        <property name="geometry">
-         <rect>
-          <x>210</x>
-          <y>250</y>
-          <width>111</width>
-          <height>25</height>
-         </rect>
-        </property>
-       </widget>
+      </widget>
+      <widget class="QComboBox" name="comboBox">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>250</y>
+         <width>131</width>
+         <height>32</height>
+        </rect>
+       </property>
       </widget>
      </widget>
      <widget class="QWidget" name="tab_2">
@@ -264,136 +250,123 @@ border: none;</string>
       <attribute name="title">
        <string>Set Clock</string>
       </attribute>
-      <widget class="QGroupBox" name="clockSettings">
+      <widget class="QDateTimeEdit" name="dateTimeEdit">
        <property name="geometry">
         <rect>
-         <x>130</x>
-         <y>20</y>
-         <width>281</width>
-         <height>221</height>
+         <x>160</x>
+         <y>40</y>
+         <width>191</width>
+         <height>31</height>
         </rect>
        </property>
-       <property name="title">
-        <string>Clock Settings</string>
+      </widget>
+      <widget class="QPushButton" name="set_time">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>130</y>
+         <width>121</width>
+         <height>51</height>
+        </rect>
        </property>
-       <widget class="QDateTimeEdit" name="dateTimeEdit">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>40</y>
-          <width>191</width>
-          <height>31</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="set_time">
-        <property name="geometry">
-         <rect>
-          <x>80</x>
-          <y>150</y>
-          <width>121</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Set Clock</string>
-        </property>
-       </widget>
+       <property name="text">
+        <string>Set Clock</string>
+       </property>
       </widget>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>730</x>
-       <y>460</y>
-       <width>31</width>
-       <height>61</height>
+       <x>20</x>
+       <y>380</y>
+       <width>451</width>
+       <height>121</height>
       </rect>
      </property>
-     <property name="title">
-      <string>Bat</string>
+     <property name="text">
+      <string>note: make sure to disable changing tabs when a session is in progress</string>
      </property>
-     <widget class="QLabel" name="battery3">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>45</y>
-        <width>31</width>
-        <height>14</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color : green;
-border: 1px solid black;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="battery1">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>25</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color : green;
-border: 1px solid black;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="battery_top">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>9</width>
-        <height>10</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 1px solid black;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="battery2">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>35</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color : green;
-border: 1px solid black;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
     </widget>
+   </widget>
+   <widget class="QLabel" name="battery3">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>545</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery_top">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>515</y>
+      <width>9</width>
+      <height>10</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white; border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery1">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>520</y>
+      <width>31</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>533</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
  </widget>

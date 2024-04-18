@@ -28,7 +28,7 @@ public slots:
     void breakContact();
     void startSession();
     void endSession();
-    void updateEEGPlot();
+    // void updateEEGPlot();
     void handleElectrodeSelection(int index);
 
 private:

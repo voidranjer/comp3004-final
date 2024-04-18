@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <neuresetcontroller.h>
 #include <QTimer>
-#include <eegsimulator.h>
+#include "eegsimulator.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -184,15 +184,23 @@ void MainWindow::breakContact() {
 
     inContact = !inContact;
 
+
+    if (inContact) {
+        eegSimulator = new EEGSimulator(ui->customPlot, 7, this);
+    }
+
     if (inContact) {
         ui->blue_light->setStyleSheet("background-color: blue;");
         ui->break_contact->setText("Break Contact");
         ui->start_session->setEnabled(true);
-        if (eegSimulator) {
-            delete eegSimulator;
-            eegSimulator = nullptr;
-        }
-        eegSimulator = new EEGSimulator(ui->customPlot, 7, this);
+
+        // if (eegSimulator != nullptr) {
+        //     delete eegSimulator;
+        //     eegSimulator = nullptr;
+        // }
+
+
+        // eegSimulator = new EEGSimulator(ui->customPlot, 7, this);
     } else {
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
         ui->break_contact->setText("Make Contact");
