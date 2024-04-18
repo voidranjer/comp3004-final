@@ -87,26 +87,24 @@ void MainWindow::handleElectrodeSelection(int index) {
 void MainWindow::changeMachineState()
 {
     isOn = !isOn;
-    // QList<QWidget *> elements = {ui->battery1,      ui->battery2,
-    //                              ui->battery3,      ui->battery_top,
-    //                              ui->break_contact, ui->start_session,
-    //                              ui->past_session,  ui->change_date,
-    //                              ui->datetimeDisplay
-    // };
+     QList<QWidget *> elements = {ui->battery1,      ui->battery2,
+                                  ui->battery3,      ui->battery_top,
+                                  ui->neuresetBox
+     };
 
-    // for (QWidget* element : elements) {
-    //     if (isOn) {
-    //         element->show();
-    //     } else {
-    //         element->hide();
-    //     }
-    // }
+     for (QWidget* element : elements) {
+         if (isOn) {
+             element->show();
+         } else {
+             element->hide();
+         }
+     }
 
-    if (isOn) {
-        ui->neuresetBox->show();
-    } else {
-        ui->neuresetBox->hide();
-    }
+//    if (isOn) {
+//        ui->neuresetBox->show();
+//    } else {
+//        ui->neuresetBox->hide();
+//    }
 
     if (inSession) {
         inSession = false;
@@ -182,23 +180,13 @@ void MainWindow::breakContact() {
 
     inContact = !inContact;
 
-
-    if (inContact) {
-        eegSimulator = new EEGSimulator(ui->customPlot, 7, this);
-    }
-
     if (inContact) {
         ui->blue_light->setStyleSheet("background-color: blue;");
         ui->break_contact->setText("Break Contact");
         ui->start_session->setEnabled(true);
 
-        // if (eegSimulator != nullptr) {
-        //     delete eegSimulator;
-        //     eegSimulator = nullptr;
-        // }
+        eegSimulator = new EEGSimulator(ui->customPlot, 7, this);
 
-
-        // eegSimulator = new EEGSimulator(ui->customPlot, 7, this);
     } else {
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
         ui->break_contact->setText("Make Contact");
