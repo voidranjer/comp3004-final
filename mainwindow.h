@@ -5,7 +5,9 @@
 #include <QDebug>
 #include <QTimer>
 #include <QThread>
+#include <qcustomplot.h>
 #include "pcwindow.h"
+#include <eegsimulator.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,9 +28,12 @@ public slots:
     void breakContact();
     void startSession();
     void endSession();
+    void updateEEGPlot();
+    void handleElectrodeSelection(int index);
 
 private:
     Ui::MainWindow *ui;
+    QCustomPlot *customPlot;
     bool outOfBattery = false;
     bool isOn = true; // will go to false when program is setting up
     bool inContact = false;
@@ -40,6 +45,6 @@ private:
     void changeMachineState();
     void giveTreatment();
     PCWindow *pcWindow;
-
+    EEGSimulator *eegSimulator;
 };
 #endif // MAINWINDOW_H
