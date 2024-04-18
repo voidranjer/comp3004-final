@@ -90,6 +90,7 @@ border: 3px solid red;</string>
      <font>
       <family>DejaVu Sans</family>
       <pointsize>20</pointsize>
+      <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
      </font>
@@ -106,7 +107,7 @@ border: none;</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
+      <y>40</y>
       <width>771</width>
       <height>531</height>
      </rect>
@@ -214,7 +215,7 @@ border: none;</string>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -268,98 +269,85 @@ border: none;</string>
       </widget>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="geometry">
-      <rect>
-       <x>730</x>
-       <y>460</y>
-       <width>31</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Bat</string>
-     </property>
-     <widget class="QLabel" name="battery3">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>45</y>
-        <width>31</width>
-        <height>14</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color : green;
+   </widget>
+   <widget class="QLabel" name="battery3">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>545</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
 border: 1px solid black;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="battery1">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>25</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color : green;
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery_top">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>515</y>
+      <width>9</width>
+      <height>10</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white; border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery1">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>520</y>
+      <width>31</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
 border: 1px solid black;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="battery_top">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>9</width>
-        <height>10</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 1px solid black;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="battery2">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>35</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color : green;
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>533</y>
+      <width>31</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
 border: 1px solid black;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </widget>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
  </widget>
