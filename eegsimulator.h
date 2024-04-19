@@ -6,43 +6,39 @@
 #include <QDateTime>
 #include <QRandomGenerator>
 #include "qcustomplot.h"
+#include "electrode.h"
+#include "defs.h"
 
 class EEGSimulator : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit EEGSimulator(QCustomPlot *plotWidget, int numElectrodes, QObject *parent = nullptr);
-    void selectElectrode(int electrodeIndex);
+    explicit EEGSimulator(QObject *parent, QCustomPlot *plotWidget);
     ~EEGSimulator();
-    double calculateDominantFrequency(double currentTime, int electrodeIndex);
+    void selectElectrode(int electrodeIndex);
     void calculateBaseline();
-    void startTreatment();
+    void startSession();
+    void endSession();
+    bool toggleContact();
+    bool getInContact() const;
+    bool getInSession() const;
 
 private:
+    Electrode* electrodes[NUM_ELECTRODES];
+
     QCustomPlot *m_customPlot;
     QTimer *m_eegUpdateTimer;
-    int m_numElectrodes = 0;
-    QVector<double> m_baselineFrequencies;
 
-    QVector<double> deltas;
-    QVector<double> thetas;
-    QVector<double> alphas;
-    QVector<double> betas;
-    QVector<double> gammas;
-
-    QVector<double> deltaAmplitudes;
-    QVector<double> thetaAmplitudes;
-    QVector<double> alphaAmplitudes;
-    QVector<double> betaAmplitudes;
-    QVector<double> gammaAmplitudes;
-
+    double m_baselineFrequencies[NUM_ELECTRODES];
     int m_currentElectrodeIndex;
+    bool inContact = false;
+    bool inSession = false;
 
     void setupEEGPlot();
     void updateEEGPlot();
 
-    double generateEEGData(double currentTime, int electrodeIndex, double offset);
+    double generateEEGData(double currentTime, Electrode *electrode, double offset);
 
 signals:
 

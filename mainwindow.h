@@ -36,8 +36,6 @@ private:
     QCustomPlot *customPlot;
     bool outOfBattery = false;
     bool isOn = true; // will go to false when program is setting up
-    bool inContact = false;
-    bool inSession = false;
     void changeRedLight();
     void loopChangeRedLight();
     void flashBatteries();

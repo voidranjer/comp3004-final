@@ -1,62 +1,51 @@
 #include <eegsimulator.h>
 
-EEGSimulator::EEGSimulator(QCustomPlot *plotWidget, int numElectrodes, QObject *parent)
-    : QObject(parent), m_customPlot(plotWidget), m_numElectrodes(numElectrodes)
+EEGSimulator::EEGSimulator(QObject *parent, QCustomPlot *plotWidget)
+    : QObject(parent), m_customPlot(plotWidget)
 {
-    setupEEGPlot();
-
-    deltas.resize(numElectrodes);
-    thetas.resize(numElectrodes);
-    alphas.resize(numElectrodes);
-    betas.resize(numElectrodes);
-    gammas.resize(numElectrodes);
-
-    deltaAmplitudes.resize(numElectrodes);
-    thetaAmplitudes.resize(numElectrodes);
-    alphaAmplitudes.resize(numElectrodes);
-    betaAmplitudes.resize(numElectrodes);
-    gammaAmplitudes.resize(numElectrodes);
-
-    for (int i = 0; i < numElectrodes; ++i) {
-        deltas[i] = QRandomGenerator::global()->bounded(1, 4);
-        thetas[i] = QRandomGenerator::global()->bounded(4, 8);
-        alphas[i] = QRandomGenerator::global()->bounded(8, 12);
-        betas[i] = QRandomGenerator::global()->bounded(12, 30);
-        gammas[i] = QRandomGenerator::global()->bounded(25, 140);
-
-        deltaAmplitudes[i] = QRandomGenerator::global()->bounded(10, 100);
-        thetaAmplitudes[i] = QRandomGenerator::global()->bounded(10, 100);
-        alphaAmplitudes[i] = QRandomGenerator::global()->bounded(10, 100);
-        betaAmplitudes[i] = QRandomGenerator::global()->bounded(10, 100);
-        gammaAmplitudes[i] = QRandomGenerator::global()->bounded(10, 100);
-    }
-
-    m_eegUpdateTimer = new QTimer(this);
-    connect(m_eegUpdateTimer, &QTimer::timeout, this, &EEGSimulator::updateEEGPlot);
-    m_eegUpdateTimer->start(100);
-
-    selectElectrode(0);
-}
-
-EEGSimulator::~EEGSimulator()
-{
-    delete m_eegUpdateTimer;
-}
-
-void EEGSimulator::setupEEGPlot() {
-    m_customPlot->clearGraphs();
-    QVector<QColor> electrodeColors = {
+    QColor electrodeColors[] = {
         QColor(Qt::red),
         QColor(Qt::green),
         QColor(Qt::blue),
-        QColor(Qt::yellow),
+        QColor(Qt::black),
         QColor(Qt::cyan),
         QColor(Qt::magenta),
         QColor(Qt::gray)
     };
-    for (int i = 0; i < m_numElectrodes; ++i) {
+
+    for (int i = 0; i < NUM_ELECTRODES; ++i) {
+        double delta = QRandomGenerator::global()->bounded(1, 4);
+        double theta = QRandomGenerator::global()->bounded(4, 8);
+        double alpha = QRandomGenerator::global()->bounded(8, 12);
+        double beta = QRandomGenerator::global()->bounded(12, 30);
+        double gamma = QRandomGenerator::global()->bounded(25, 140);
+
+        QColor color = electrodeColors[i % 7];
+
+        electrodes[i] = new Electrode(this, color, delta, theta, alpha, beta, gamma);
+    }
+
+    setupEEGPlot();
+    selectElectrode(0);
+
+    m_eegUpdateTimer = new QTimer(this);
+    connect(m_eegUpdateTimer, &QTimer::timeout, this, &EEGSimulator::updateEEGPlot);
+    m_eegUpdateTimer->start(GRAPH_SPEED);
+}
+
+EEGSimulator::~EEGSimulator()
+{
+
+}
+
+void EEGSimulator::setupEEGPlot() {
+    m_customPlot->clearGraphs();
+
+    for (int i = 0; i < NUM_ELECTRODES; ++i) {
+        Electrode *electrode = electrodes[i];
+
         QCPGraph *graph = m_customPlot->addGraph();
-        graph->setPen(QPen(electrodeColors[i % electrodeColors.size()], 2));
+        graph->setPen(QPen(electrode->getColor(), 2));
 
         graph->setLineStyle(QCPGraph::lsLine);
         graph->setAdaptiveSampling(true);
@@ -71,70 +60,66 @@ void EEGSimulator::setupEEGPlot() {
         m_customPlot->yAxis->setTicks(false);
 
     }
+
     qDebug() << "Processing input waveform...";
 }
 
 void EEGSimulator::updateEEGPlot() {
+    // if (!inSession) return;
+
+    if (!inContact && inSession) {
+        qDebug() << "Waiting for contact";
+    }
+
     double currentTime = QDateTime::currentMSecsSinceEpoch();
-    for (int i = 0; i < m_numElectrodes; ++i) {
-        double eegValue = generateEEGData(currentTime, i, 0);
+    for (int i = 0; i < NUM_ELECTRODES; ++i) {
+        Electrode *electrode = electrodes[i];
+
+        double eegValue = inContact ? generateEEGData(currentTime, electrode, 0) : 0;
         m_customPlot->graph(i)->addData(currentTime, eegValue);
     }
+
     m_customPlot->xAxis->setRange(currentTime - 3000, currentTime);
     m_customPlot->replot();
 }
 
 void EEGSimulator::selectElectrode(int electrodeIndex) {
-    if (m_customPlot != nullptr) {
-        for (int i = 0; i < m_numElectrodes; ++i) {
-            if (m_customPlot->graph(i) != nullptr) {
-                m_customPlot->graph(i)->setVisible(i == electrodeIndex);
-            } else {
-                qDebug() << "Graph" << i << "is null";
-            }
+    for (int i = 0; i < NUM_ELECTRODES; ++i) {
+        if (m_customPlot->graph(i) == nullptr) {
+            qDebug() << "Graph" << i << "is null";
+            continue;
         }
-        m_customPlot->replot();
-    } else {
-        qDebug() << "m_customPlot is null";
+
+        m_customPlot->graph(i)->setVisible(i == electrodeIndex);
     }
+
+    m_currentElectrodeIndex = electrodeIndex;
+    m_customPlot->replot();
 }
 
-double EEGSimulator::generateEEGData(double currentTime, int electrodeIndex, double offset) {
-    double frequency = deltas[electrodeIndex] + betas[electrodeIndex] + alphas[electrodeIndex] + gammas[electrodeIndex] + thetas[electrodeIndex];
-    double totalAmplitude = deltaAmplitudes[electrodeIndex] + thetaAmplitudes[electrodeIndex] +
-                             alphaAmplitudes[electrodeIndex] + betaAmplitudes[electrodeIndex] +
-                             gammaAmplitudes[electrodeIndex];
+double EEGSimulator::generateEEGData(double currentTime, Electrode *electrode, double offset) {
+    double frequency = electrode->getFreqSum();
+    double totalAmplitude = electrode->getAmplitudeSum();
     frequency += offset;
     return totalAmplitude * sin(2 * M_PI * frequency * currentTime / 1000.0);
 }
 
 
-double EEGSimulator::calculateDominantFrequency(double currentTime, int electrodeIndex) {
-    double totalAmplitude = deltaAmplitudes[electrodeIndex] + thetaAmplitudes[electrodeIndex] +
-                             alphaAmplitudes[electrodeIndex] + betaAmplitudes[electrodeIndex] +
-                             gammaAmplitudes[electrodeIndex];
-
-    double dominantFrequency = ((deltas[electrodeIndex] * deltaAmplitudes[electrodeIndex]) + (betas[electrodeIndex] * betaAmplitudes[electrodeIndex]) +
-            (alphas[electrodeIndex] * alphaAmplitudes[electrodeIndex]) + (gammas[electrodeIndex] * gammaAmplitudes[electrodeIndex]) +
-            (thetas[electrodeIndex]) * thetaAmplitudes[electrodeIndex])/ totalAmplitude;
-
-    return dominantFrequency;
-}
 
 void EEGSimulator::calculateBaseline() {
+    qDebug() << "Measuring baseline...";
     QTimer::singleShot(1000, this, [=]() {
-        QVector<double> baselineFrequencies;
-        double currentTime = QDateTime::currentMSecsSinceEpoch();
-        for (int i = 0; i < m_numElectrodes; ++i) {
-            double dominantFrequency = calculateDominantFrequency(currentTime, i);
-            baselineFrequencies.append(dominantFrequency);
+        for (int i = 0; i < NUM_ELECTRODES; ++i) {
+            double dominantFrequency = electrodes[i]->getDominantFrequency();
+            m_baselineFrequencies[i] = dominantFrequency;
         }
-        m_baselineFrequencies = baselineFrequencies;
     });
 }
 
-void EEGSimulator::startTreatment() {
-    qDebug() << "Therapy started.";
+void EEGSimulator::startSession() {
+    inSession = true;
+
+    qDebug() << "Therapy session started.";
     QVector<double> offsetFrequencies = {5, 10, 15, 20};
 
     calculateBaseline();
@@ -159,13 +144,17 @@ void EEGSimulator::startTreatment() {
 
         qDebug() << "Round" << round + 1 << "of therapy";
 
-        for (int i = 0; i < m_baselineFrequencies.size(); ++i) {
+        for (int i = 0; i < NUM_ELECTRODES; ++i) {
+            Electrode *electrode = electrodes[i];
+
             double feedbackFrequency = (m_baselineFrequencies[i] / 16.0) + offsetFrequencies[round];
             double feedbackStartTime = currentTime;
-            for (int j = 0; j < m_numElectrodes; ++j) {
-                double eegValue = generateEEGData(feedbackStartTime, j, feedbackFrequency);
+
+            for (int j = 0; j < NUM_ELECTRODES; ++j) {
+                double eegValue = generateEEGData(feedbackStartTime, electrode, feedbackFrequency);
                 m_customPlot->graph(j)->addData(feedbackStartTime, eegValue);
             }
+
             qDebug() << "Administered hertz to Electrode" << i+1 << "with the frequency" << feedbackFrequency;
         }
 
@@ -184,6 +173,25 @@ void EEGSimulator::startTreatment() {
     therapyTimer->start(1000);
 }
 
+void EEGSimulator::endSession() {
+    inSession = false;
+}
+
+bool EEGSimulator::toggleContact()
+{
+    inContact = !inContact;
+    return inContact;
+}
+
+bool EEGSimulator::getInContact() const
+{
+    return inContact;
+}
+
+bool EEGSimulator::getInSession() const
+{
+    return inSession;
+}
 
 
 

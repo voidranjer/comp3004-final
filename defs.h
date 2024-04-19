@@ -3,5 +3,6 @@
 
 #define CLOCK_TICK      1000 // 1 second
 #define NUM_ELECTRODES  7
+#define GRAPH_SPEED     100
 
 #endif // DEFS_H
