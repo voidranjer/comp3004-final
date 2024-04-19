@@ -1,4 +1,5 @@
 #include "electrode.h"
+#include "defs.h"
 #include <QRandomGenerator>
 
 Electrode::Electrode(QObject *parent, QColor color, double delta, double theta, double alpha, double beta, double gamma)
@@ -38,4 +39,18 @@ double Electrode::getDominantFrequency()
                                 (theta) * thetaAmplitude) / totalAmplitude;
 
     return dominantFrequency;
+}
+
+void Electrode::addOffset(double offset)
+{
+    delta += offset;
+    theta += offset;
+    alpha += offset;
+    beta += offset;
+    gamma += offset;
+    // deltaAmplitude += offset;
+    // thetaAmplitude += offset;
+    // alphaAmplitude += offset;
+    // betaAmplitude += offset;
+    // gammaAmplitude += offset;
 }

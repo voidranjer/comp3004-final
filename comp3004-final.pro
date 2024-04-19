@@ -16,7 +16,8 @@ SOURCES += \
     mainwindow.cpp \
     neuresetcontroller.cpp \
     qcustomplot.cpp \
-    pcwindow.cpp
+    pcwindow.cpp \
+    sessionlogger.cpp
 
 HEADERS += \
     defs.h \
@@ -26,7 +27,8 @@ HEADERS += \
     mainwindow.h \
     neuresetcontroller.h \
     pcwindow.h \
-    qcustomplot.h
+    qcustomplot.h \
+    sessionlogger.h
 
 FORMS += \
     mainwindow.ui \

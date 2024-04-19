@@ -20,7 +20,9 @@ public:
     // Noise
     const int AMPLITUDE_MIN = 5;
     const int AMPLITUDE_MAX = 150;
-    const double NOISE_FACTOR = 1.5;
+
+    // Utils
+    void addOffset(double offset);
 private:
     // others
     QColor color;

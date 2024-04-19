@@ -30,8 +30,13 @@ EEGSimulator::EEGSimulator(QObject *parent, QCustomPlot *plotWidget)
 
     m_eegUpdateTimer = new QTimer(this);
     connect(m_eegUpdateTimer, &QTimer::timeout, this, &EEGSimulator::updateEEGPlot);
-    m_eegUpdateTimer->start(1000 / 60);
+    m_eegUpdateTimer->start(1000 / 60); // 60 FPS
     // m_eegUpdateTimer->start(100);
+
+    // Init timers
+    observationTimer = new QTimer(this);
+    feedbackTimer = new QTimer(this);
+    connect(observationTimer, &QTimer::timeout, this, &EEGSimulator::beginFeedback);
 }
 
 EEGSimulator::~EEGSimulator()
@@ -41,25 +46,33 @@ EEGSimulator::~EEGSimulator()
 
 void EEGSimulator::setupEEGPlot() {
     m_customPlot->clearGraphs();
+    m_customPlot->xAxis->setRange(0, GRAPH_XRANGE);
+    m_customPlot->yAxis->setRange(-GRAPH_YRANGE, GRAPH_YRANGE);
+    m_customPlot->xAxis->setTickLabels(false);
+    m_customPlot->xAxis->setTicks(false);
+    m_customPlot->yAxis->setTickLabels(false);
+    m_customPlot->yAxis->setTicks(false);
 
-    for (int i = 0; i < NUM_ELECTRODES; ++i) {
-        Electrode *electrode = electrodes[i];
+    // Add one additional overlay graph for feedback (different color) - this last graph is reserved: m_customPlot->graph(NUM_ELECTRODES)
+    int numGraphs = NUM_ELECTRODES + 1;
+
+    for (int i = 0; i < numGraphs; ++i) {
 
         QCPGraph *graph = m_customPlot->addGraph();
-        graph->setPen(QPen(electrode->getColor(), 2));
 
         graph->setLineStyle(QCPGraph::lsLine);
         graph->setAdaptiveSampling(true);
         graph->setScatterStyle(QCPScatterStyle::ssNone);
         graph->setAntialiased(true);
 
-        m_customPlot->xAxis->setRange(0, 4000);
-        m_customPlot->yAxis->setRange(-700, 700);
-        m_customPlot->xAxis->setTickLabels(false);
-        m_customPlot->xAxis->setTicks(false);
-        m_customPlot->yAxis->setTickLabels(false);
-        m_customPlot->yAxis->setTicks(false);
-
+        // set color based on electrodes
+        if (i < NUM_ELECTRODES) {
+            Electrode *electrode = electrodes[i];
+            graph->setPen(QPen(electrode->getColor(), 2));
+        } else {
+            // special config for feedback graph
+            graph->setPen(QPen(Qt::yellow, 5));
+        }
     }
 
     qDebug() << "Processing input waveform...";
@@ -72,16 +85,76 @@ void EEGSimulator::updateEEGPlot() {
         qDebug() << "Waiting for contact";
     }
 
+    // draw electrode graphs
+    double eegValue;
     double currentTime = QDateTime::currentMSecsSinceEpoch();
     for (int i = 0; i < NUM_ELECTRODES; ++i) {
         Electrode *electrode = electrodes[i];
+        eegValue = inContact ? generateEEGData(currentTime, electrode, 0) : 0;
 
-        double eegValue = inContact ? generateEEGData(currentTime, electrode, 0) : 0;
-        m_customPlot->graph(i)->addData(currentTime, eegValue);
+        // select feedback graph instead of regular graph if feedback is true
+        QCPGraph *graph = isFeedback ? m_customPlot->graph(NUM_ELECTRODES) : m_customPlot->graph(i);
+        graph->addData(currentTime, eegValue);
     }
 
-    m_customPlot->xAxis->setRange(currentTime - GRAPH_RANGE, currentTime);
+    m_customPlot->xAxis->setRange(currentTime - GRAPH_XRANGE, currentTime);
     m_customPlot->replot();
+}
+
+void EEGSimulator::beginFeedback()
+{
+    isFeedback = true;
+
+    qDebug() << "Finished measuring, calculating baseline...";
+
+    // this does nothing for now.
+    calculateBaseline();
+
+    // clear previous feedback graph (to prevent jumps in the line)
+    m_customPlot->graph(NUM_ELECTRODES)->data()->clear();
+
+    qDebug() << "Administering feedback... ( ROUND: " << therapyRound + 1 << ")";
+
+    connect(feedbackTimer, &QTimer::timeout, this, &EEGSimulator::endFeedback);
+    feedbackTimer->start(FEEDBACK_DURATION);
+}
+
+void EEGSimulator::endFeedback()
+{
+    if (therapyRound >= NUM_ROUNDS - 1) {
+        // TODO HERE: Make final round measurements
+
+        qDebug() << "Finished therapy session. Stopping measurements...";
+        endSession();
+        return;
+    }
+
+    QVector<double> OFFSETS = {5, 10, 15, 20};
+
+    for (int i = 0; i < NUM_ELECTRODES; ++i) {
+        Electrode *electrode = electrodes[i];
+
+        double feedbackFrequency = (m_baselineFrequencies[i] / 16.0) + OFFSETS[therapyRound];
+
+        // Permanently add feedback frequency to electrode
+        electrode->addOffset(feedbackFrequency);
+
+        // Reflect in feedback graph
+        double feedbackTime = QDateTime::currentMSecsSinceEpoch();
+        for (int j = 0; j < NUM_ELECTRODES; ++j) {
+            m_customPlot->graph(j)->addData(feedbackTime, 0); // reset all graphs to 0 before making the jump (to avoid visual jumps due to cut off by feedback graph)
+            double eegValue = generateEEGData(feedbackTime, electrode, feedbackFrequency, FEEDBACK_FACTOR);
+            m_customPlot->graph(j)->addData(feedbackTime, eegValue);
+        }
+
+        qDebug() << "Administered hertz to Electrode" << i+1 << "with the frequency" << feedbackFrequency;
+    }
+
+    therapyRound++;
+    qDebug() << "Finished feedback. Resuming measurements...";
+    isFeedback = false;
+    feedbackTimer->stop();
+    observationTimer->start(OBSERVE_DURATION);
 }
 
 void EEGSimulator::selectElectrode(int electrodeIndex) {
@@ -118,64 +191,15 @@ void EEGSimulator::calculateBaseline() {
 }
 
 void EEGSimulator::startSession() {
+    observationTimer->start(OBSERVE_DURATION);
     inSession = true;
-
-    qDebug() << "Therapy session started.";
-    QVector<double> offsetFrequencies = {5, 10, 15, 20};
-
-    calculateBaseline();
-
-    static int round = 0;
-    round = 0;
-
-    QTimer *therapyTimer = new QTimer(this);
-    QTimer *pauseTimer = new QTimer(this);
-
-    connect(therapyTimer, &QTimer::timeout, this, [=]() {
-        double currentTime = QDateTime::currentMSecsSinceEpoch();
-
-        if (round >= 4) {
-            qDebug() << "Therapy finished.";
-            therapyTimer->stop();
-            therapyTimer->deleteLater();
-            pauseTimer->stop();
-            pauseTimer->deleteLater();
-            return;
-        }
-
-        qDebug() << "Round" << round + 1 << "of therapy";
-
-        for (int i = 0; i < NUM_ELECTRODES; ++i) {
-            Electrode *electrode = electrodes[i];
-
-            double feedbackFrequency = (m_baselineFrequencies[i] / 16.0) + offsetFrequencies[round];
-            double feedbackStartTime = currentTime;
-
-            for (int j = 0; j < NUM_ELECTRODES; ++j) {
-                double eegValue = generateEEGData(feedbackStartTime, electrode, feedbackFrequency, EXAGGERATE_FACTOR);
-                m_customPlot->graph(j)->addData(feedbackStartTime, eegValue);
-            }
-
-            qDebug() << "Administered hertz to Electrode" << i+1 << "with the frequency" << feedbackFrequency;
-        }
-
-        if (round < 4) {
-            pauseTimer->start(5000);
-            therapyTimer->stop();
-            round++;
-        }
-    });
-
-    connect(pauseTimer, &QTimer::timeout, this, [=]() {
-        therapyTimer->start(1000);
-        qDebug() << "Analysis complete.";
-    });
-
-    therapyTimer->start(1000);
+    qDebug() << "Starting therapy session...";
 }
 
 void EEGSimulator::endSession() {
     inSession = false;
+    observationTimer->stop();
+    qDebug() << "Ending therapy session...";
 }
 
 bool EEGSimulator::toggleContact()

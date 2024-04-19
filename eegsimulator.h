@@ -27,17 +27,27 @@ public:
 private:
     Electrode* electrodes[NUM_ELECTRODES];
 
+    // Qt
     QCustomPlot *m_customPlot;
     QTimer *m_eegUpdateTimer;
+    QTimer *observationTimer;
+    QTimer *feedbackTimer;
 
+    // Data
     double m_baselineFrequencies[NUM_ELECTRODES];
-    int m_currentElectrodeIndex;
+
+    // State
     bool inContact = false;
     bool inSession = false;
+    bool isFeedback = false;
+    int m_currentElectrodeIndex;
+    int therapyRound = 0; // limit: NUM_ROUNDS in defs.h
 
+    // Helper functions
     void setupEEGPlot();
     void updateEEGPlot();
-
+    void beginFeedback();
+    void endFeedback(); // automatically called by beginFeedback
     double generateEEGData(double currentTime, Electrode *electrode, double offset, double amplitudeFactor = 1);
 
 signals:
