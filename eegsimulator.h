@@ -50,6 +50,8 @@ private:
     void endFeedback(); // automatically called by beginFeedback
     double generateEEGData(double currentTime, Electrode *electrode, double offset, double amplitudeFactor = 1);
 
+    bool waiting;
+
 signals:
 
 };

@@ -14,32 +14,24 @@ MainWindow::MainWindow(QWidget *parent)
     pcWindow = new PCWindow(this);
     pcWindow->show();
 
+    // initialize all components
+    init();
+}
+
+void MainWindow::init()
+{
     // init components
     controller = new NeuresetController(this);
     eegSimulator = new EEGSimulator(this, ui->customPlot);
 
+    // connect buttons
     connect(ui->powerButton, SIGNAL(released()), this, SLOT (powerButtonClicked()));
     connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
     connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
     connect(ui->end_session, SIGNAL(released()), this, SLOT (endSession()));
 
     // to hide the objects that shouldn't be visible when the device is powered off
-    QList<QWidget *> elements = {ui->battery1,      ui->battery2,
-                                  ui->battery3,      ui->battery_top,
-                                  ui->neuresetBox,   ui->battery1_2,
-                                  ui->battery1_3,    ui->battery2_2,
-                                  ui->battery2_3,    ui->battery3_2,
-                                  ui->battery3_3
-     };
-
-     for (QWidget* element : elements) {
-         element->hide();
-     }
-
-
-
-    // NEEDS TO BE FIXED !!! @James
-    // NeuresetController *controller = new NeuresetController(this);
+    changeMachineState();
 
     // CLOCK: Tick the clock
     connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](QDateTime datetime){ ui->datetimeDisplay->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));});
@@ -51,23 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
               ui->dateTimeEdit->setDateTime(controller->getDatetime());
             });
 
-    // CLOCK: TODO - aekus
-    // connect(ui->change_date, &QPushButton::released, controller, &NeuresetController::toggleClockSetting);
-    // connect(controller, &NeuresetController::clockSettingActiveChanged,
-    //         ui->clockSettings, [this](bool active) {
-    //             if (active) {
-    //                 ui->clockSettings->show();
-    //             } else {
-    //                 ui->clockSettings->hide();
-    //             }
-    //         });
-
     // CLOCK: Event handler for set_time button
     connect(ui->set_time, &QPushButton::released, controller, [=](){
         controller->setDatetime(ui->dateTimeEdit->dateTime());
     });
-
-
 
     // GRAPH: setting initial statis of graph
     ui->customPlot->xAxis->setRange(0, 4000);
@@ -87,6 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox->addItem("Electrode 7");
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::handleElectrodeSelection);
 }
+
 
 MainWindow::~MainWindow()
 {

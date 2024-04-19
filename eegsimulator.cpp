@@ -37,6 +37,8 @@ EEGSimulator::EEGSimulator(QObject *parent, QCustomPlot *plotWidget)
     observationTimer = new QTimer(this);
     feedbackTimer = new QTimer(this);
     connect(observationTimer, &QTimer::timeout, this, &EEGSimulator::beginFeedback);
+
+    waiting = false;
 }
 
 EEGSimulator::~EEGSimulator()
@@ -81,8 +83,13 @@ void EEGSimulator::setupEEGPlot() {
 void EEGSimulator::updateEEGPlot() {
     // if (!inSession) return;
 
-    if (!inContact && inSession) {
+    if (!inContact && inSession && !waiting) {
+        waiting = true;
         qDebug() << "Waiting for contact";
+    }
+
+    if (waiting && inContact) {
+        waiting = false;
     }
 
     // draw electrode graphs

@@ -36,13 +36,14 @@ private:
     Ui::MainWindow *ui;
     QCustomPlot *customPlot;
     bool outOfBattery = false;
-    bool isOn = false;
+    bool isOn = true; // will go to false when program is setting up
     void changeRedLight();
     void loopChangeRedLight();
     void reduceBattery();
     void changeMachineState();
     void giveTreatment();
     void flashBatteries();
+    void init();
     PCWindow *pcWindow;
     EEGSimulator *eegSimulator;
     NeuresetController *controller;
