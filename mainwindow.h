@@ -23,26 +23,23 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QList<QWidget *> static createBattery();
 
 public slots:
     void powerButtonClicked();
     void breakContact();
     void startSession();
     void endSession();
-    // void updateEEGPlot();
     void handleElectrodeSelection(int index);
 
 private:
     Ui::MainWindow *ui;
     QCustomPlot *customPlot;
-    bool outOfBattery = false;
     bool isOn = true; // will go to false when program is setting up
     void changeRedLight();
     void loopChangeRedLight();
-    void reduceBattery();
     void changeMachineState();
     void giveTreatment();
-    void flashBatteries();
     void init();
     PCWindow *pcWindow;
     EEGSimulator *eegSimulator;

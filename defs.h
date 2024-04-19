@@ -16,4 +16,6 @@
 #define FEEDBACK_DURATION   1000 // 1 second
 #define NUM_ROUNDS          5    // 4 + 1 (last round is measurement only)
 
+#define BATTERY_LIFE        180 // Number of seconds battery will last (x2 times used while in session)
+
 #endif // DEFS_H

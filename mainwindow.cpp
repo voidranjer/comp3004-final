@@ -20,8 +20,15 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::init()
 {
+    QList<QLabel *> elements = {ui->battery_top,   ui->battery1,
+                                 ui->battery1_2,    ui->battery1_3,
+                                 ui->battery2,      ui->battery2_2,
+                                 ui->battery2_3,    ui->battery3,
+                                 ui->battery3_2,    ui->battery3_3
+    };
+
     // init components
-    controller = new NeuresetController(this);
+    controller = new NeuresetController(this, elements);
     eegSimulator = new EEGSimulator(this, ui->customPlot);
 
     // connect buttons
@@ -65,6 +72,9 @@ void MainWindow::init()
     ui->comboBox->addItem("Electrode 6");
     ui->comboBox->addItem("Electrode 7");
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::handleElectrodeSelection);
+
+    // CLOCK: Tick the clock
+    connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](QDateTime datetime){ ui->datetimeDisplay->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));});
 }
 
 
@@ -79,38 +89,6 @@ void MainWindow::handleElectrodeSelection(int index) {
     } else {
         qDebug() << "EEG simulator is not initialized.";
     }
-}
-
-void MainWindow::flashBatteries()
-{
-    QList<QWidget *> elements = {ui->battery_top,   ui->battery1,
-                                 ui->battery1_2,    ui->battery1_3,
-                                 ui->battery2,      ui->battery2_2,
-                                 ui->battery2_3,    ui->battery3,
-                                 ui->battery3_2,    ui->battery3_3
-    };
-
-    for (QWidget* element : elements) {
-        element->show();
-    }
-
-    QTimer::singleShot(500, this, [=]() {
-        for (QWidget* element : elements) {
-            element->hide();
-        }
-
-        QTimer::singleShot(500, this, [=]() {
-            for (QWidget* element : elements) {
-                element->show();
-            }
-
-            QTimer::singleShot(650, this, [=]() {
-                for (QWidget* element : elements) {
-                    element->hide();
-                }
-            });
-        });
-    });
 }
 
 void MainWindow::changeMachineState()
@@ -134,7 +112,6 @@ void MainWindow::changeMachineState()
 
     if (eegSimulator->getInSession()) {
         eegSimulator->endSession();
-        reduceBattery();
     }
 
     ui->end_session->hide();
@@ -148,63 +125,6 @@ void MainWindow::changeMachineState()
     }
 }
 
-void MainWindow::reduceBattery()
-{
-    if (ui->battery_top->styleSheet().contains("green")) {
-        ui->battery_top->setStyleSheet("background-color: white; border: 1px solid black;");
-        return;
-    }
-
-    if (ui->battery1->styleSheet().contains("green")) {
-        ui->battery1->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0;");
-        return;
-    }
-    if (ui->battery1_2->styleSheet().contains("green")) {
-        ui->battery1_2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0; border-top: 0;");
-        return;
-    }
-    if (ui->battery1_3->styleSheet().contains("green")) {
-        ui->battery1_3->setStyleSheet("background-color: white; border: 1px solid black; border-top: 0;");
-        ui->battery2->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0;");
-        ui->battery2_2->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0; border-top: 0;");
-        ui->battery2_3->setStyleSheet("background-color: yellow; border: 1px solid black; border-top: 0;");
-        ui->battery3->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0;");
-        ui->battery3_2->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0; border-top: 0;");
-        ui->battery3_3->setStyleSheet("background-color: yellow; border: 1px solid black; border-top: 0;");
-        return;
-    }
-
-    if (ui->battery2->styleSheet().contains("yellow")) {
-        ui->battery2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0;");
-        return;
-    }
-    if (ui->battery2_2->styleSheet().contains("yellow")) {
-        ui->battery2_2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0; border-top: 0; border-bottom: 0; border-top: 0;");
-        return;
-    }
-    if (ui->battery2_3->styleSheet().contains("yellow")) {
-        ui->battery2_3->setStyleSheet("background-color: white; border: 1px solid black; border-top: 0;");
-        ui->battery3->setStyleSheet("background-color: red; border: 1px solid black; border-bottom: 0;");
-        ui->battery3_2->setStyleSheet("background-color: red; border: 1px solid black; border-bottom: 0; border-top: 0;");
-        ui->battery3_3->setStyleSheet("background-color: red; border: 1px solid black; border-top: 0;");
-        return;
-    }
-
-    if (ui->battery3->styleSheet().contains("red")) {
-        ui->battery3->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0;");
-        return;
-    }
-    if (ui->battery3_2->styleSheet().contains("red")) {
-        ui->battery3_2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0; border-top: 0; border-bottom: 0; border-top: 0;");
-        return;
-    }
-    if (ui->battery3_3->styleSheet().contains("red")) {
-        ui->battery3_3->setStyleSheet("background-color: white; border: 1px solid black; border-top: 0;");
-    }
-
-    outOfBattery = true;
-}
-
 void MainWindow::giveTreatment()
 {
     ui->green_light->setStyleSheet("background-color: green;");
@@ -216,8 +136,9 @@ void MainWindow::giveTreatment()
 
 void MainWindow::powerButtonClicked()
 {
-    if (outOfBattery) {
+    if (controller->getOutOfBattery()) {
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
+        controller->flashBatteries();
 
         if (!isOn) {
             return;
@@ -236,7 +157,7 @@ void MainWindow::powerButtonClicked()
 }
 
 void MainWindow::breakContact() {
-    if (outOfBattery) {
+    if (controller->getOutOfBattery()) {
         powerButtonClicked();
         return;
     }
@@ -277,7 +198,7 @@ void MainWindow::changeRedLight() {
 
 void MainWindow::startSession()
 {
-    if (outOfBattery) {
+    if (controller->getOutOfBattery()) {
         powerButtonClicked();
         return;
     }
@@ -296,7 +217,6 @@ void MainWindow::startSession()
 void MainWindow::endSession()
 {
     eegSimulator->endSession();
-    reduceBattery();
 
     QList<QWidget*> elements = {ui->start_session, ui->past_session, ui->change_date};
 

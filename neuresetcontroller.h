@@ -3,13 +3,17 @@
 
 #include <QObject>
 #include <QDateTime>
+#include "battery.h"
+#include <QLabel>
 
 class NeuresetController : public QObject
 {
     Q_OBJECT
 public:
-    explicit NeuresetController(QObject *parent = nullptr);
+    explicit NeuresetController(QObject *parent = nullptr, QList<QLabel *> elements = {});
     QDateTime getDatetime();
+    bool getOutOfBattery();
+    void flashBatteries();
 
 private:
     /*
@@ -20,6 +24,7 @@ private:
     QDateTime baseDatetime = QDateTime::currentDateTime(); // to store the custom time that the user sets
     void tickTime(); // tick the clock
     bool clockSettingActive = false;
+    Battery* battery;
 
 signals:
     void timeChanged(QDateTime datetime); // emitted every second
