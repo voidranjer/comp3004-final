@@ -247,28 +247,31 @@ void MainWindow::loopChangeRedLight() {
 
 void MainWindow::flashBatteries()
 {
-    ui->battery_top->show();
-    ui->battery1->show();
-    ui->battery2->show();
-    ui->battery3->show();
+    QList<QWidget *> elements = {ui->battery_top,   ui->battery1,
+                                 ui->battery1_2,    ui->battery1_3,
+                                 ui->battery2,      ui->battery2_2,
+                                 ui->battery2_3,    ui->battery3,
+                                 ui->battery3_2,    ui->battery3_3
+    };
+
+    for (QWidget* element : elements) {
+        element->show();
+    }
 
     QTimer::singleShot(500, this, [=]() {
-        ui->battery_top->hide();
-        ui->battery1->hide();
-        ui->battery2->hide();
-        ui->battery3->hide();
+        for (QWidget* element : elements) {
+            element->hide();
+        }
 
         QTimer::singleShot(500, this, [=]() {
-            ui->battery_top->show();
-            ui->battery1->show();
-            ui->battery2->show();
-            ui->battery3->show();
+            for (QWidget* element : elements) {
+                element->show();
+            }
 
             QTimer::singleShot(650, this, [=]() {
-                ui->battery_top->hide();
-                ui->battery1->hide();
-                ui->battery2->hide();
-                ui->battery3->hide();
+                for (QWidget* element : elements) {
+                    element->hide();
+                }
             });
         });
     });
