@@ -153,32 +153,6 @@ border: none;</string>
       <string>End Session</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="past_session">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>80</y>
-       <width>171</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>View Past Sessions</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="change_date">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>120</y>
-       <width>171</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Change Date and Time</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="break_contact">
      <property name="geometry">
       <rect>

@@ -203,14 +203,14 @@ void MainWindow::startSession()
         return;
     }
 
-    QList<QWidget*> elements = {ui->start_session, ui->past_session, ui->change_date};
+    ui->tabs->setTabEnabled(1, false);
+    ui->tabs->setTabEnabled(2, false);
+
     if (eegSimulator) {
         eegSimulator->startSession();
     }
-    for (QWidget* element : elements) {
-        element->hide();
-    }
 
+    ui->start_session->hide();
     ui->end_session->show();
 }
 
@@ -218,11 +218,10 @@ void MainWindow::endSession()
 {
     eegSimulator->endSession();
 
-    QList<QWidget*> elements = {ui->start_session, ui->past_session, ui->change_date};
+    ui->tabs->setTabEnabled(1, true);
+    ui->tabs->setTabEnabled(2, true);
 
-    for (QWidget* element : elements) {
-        element->show();
-    }
+    ui->start_session->show();
 
     ui->end_session->hide();
 }
