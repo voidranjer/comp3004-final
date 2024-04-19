@@ -8,6 +8,7 @@
 #include <qcustomplot.h>
 #include "pcwindow.h"
 #include <eegsimulator.h>
+#include "neuresetcontroller.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,11 +39,12 @@ private:
     bool isOn = true; // will go to false when program is setting up
     void changeRedLight();
     void loopChangeRedLight();
-    void flashBatteries();
     void reduceBattery();
     void changeMachineState();
     void giveTreatment();
+    void flashBatteries();
     PCWindow *pcWindow;
     EEGSimulator *eegSimulator;
+    NeuresetController *controller;
 };
 #endif // MAINWINDOW_H

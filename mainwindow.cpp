@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     pcWindow = new PCWindow(this);
     pcWindow->show();
 
+    controller = new NeuresetController(this);
+
     connect(ui->powerButton, SIGNAL(released()), this, SLOT (powerButtonClicked()));
     connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
     connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
@@ -21,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
 
-    NeuresetController *controller = new NeuresetController(this); // todo: move to header file
+    // NEEDS TO BE FIXED !!! @James
+    NeuresetController *controller = new NeuresetController(this);
 
     // CLOCK: Tick the clock
     connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](QDateTime datetime){ ui->datetimeDisplay->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));});
@@ -86,30 +89,56 @@ void MainWindow::handleElectrodeSelection(int index) {
     }
 }
 
+void MainWindow::flashBatteries()
+{
+    QList<QWidget *> elements = {ui->battery_top,   ui->battery1,
+                                 ui->battery1_2,    ui->battery1_3,
+                                 ui->battery2,      ui->battery2_2,
+                                 ui->battery2_3,    ui->battery3,
+                                 ui->battery3_2,    ui->battery3_3
+    };
+
+    for (QWidget* element : elements) {
+        element->show();
+    }
+
+    QTimer::singleShot(500, this, [=]() {
+        for (QWidget* element : elements) {
+            element->hide();
+        }
+
+        QTimer::singleShot(500, this, [=]() {
+            for (QWidget* element : elements) {
+                element->show();
+            }
+
+            QTimer::singleShot(650, this, [=]() {
+                for (QWidget* element : elements) {
+                    element->hide();
+                }
+            });
+        });
+    });
+}
 
 void MainWindow::changeMachineState()
 {
     isOn = !isOn;
-    // QList<QWidget *> elements = {ui->battery1,      ui->battery2,
-    //                              ui->battery3,      ui->battery_top,
-    //                              ui->break_contact, ui->start_session,
-    //                              ui->past_session,  ui->change_date,
-    //                              ui->datetimeDisplay
-    // };
+     QList<QWidget *> elements = {ui->battery1,      ui->battery2,
+                                  ui->battery3,      ui->battery_top,
+                                  ui->neuresetBox,   ui->battery1_2,
+                                  ui->battery1_3,    ui->battery2_2,
+                                  ui->battery2_3,    ui->battery3_2,
+                                  ui->battery3_3
+     };
 
-    // for (QWidget* element : elements) {
-    //     if (isOn) {
-    //         element->show();
-    //     } else {
-    //         element->hide();
-    //     }
-    // }
-
-    if (isOn) {
-        ui->neuresetBox->show();
-    } else {
-        ui->neuresetBox->hide();
-    }
+     for (QWidget* element : elements) {
+         if (isOn) {
+             element->show();
+         } else {
+             element->hide();
+         }
+     }
 
     if (eegSimulator->getInSession()) {
         eegSimulator->endSession();
@@ -129,20 +158,58 @@ void MainWindow::changeMachineState()
 
 void MainWindow::reduceBattery()
 {
+    if (ui->battery_top->styleSheet().contains("green")) {
+        ui->battery_top->setStyleSheet("background-color: white; border: 1px solid black;");
+        return;
+    }
+
     if (ui->battery1->styleSheet().contains("green")) {
-        ui->battery1->setStyleSheet("background-color: white; border: 1px solid black;");
-        ui->battery2->setStyleSheet("background-color: yellow; border: 1px solid black;");
-        ui->battery3->setStyleSheet("background-color: yellow; border: 1px solid black;");
+        ui->battery1->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0;");
         return;
     }
+    if (ui->battery1_2->styleSheet().contains("green")) {
+        ui->battery1_2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0; border-top: 0;");
+        return;
+    }
+    if (ui->battery1_3->styleSheet().contains("green")) {
+        ui->battery1_3->setStyleSheet("background-color: white; border: 1px solid black; border-top: 0;");
+        ui->battery2->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0;");
+        ui->battery2_2->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0; border-top: 0;");
+        ui->battery2_3->setStyleSheet("background-color: yellow; border: 1px solid black; border-top: 0;");
+        ui->battery3->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0;");
+        ui->battery3_2->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0; border-top: 0;");
+        ui->battery3_3->setStyleSheet("background-color: yellow; border: 1px solid black; border-top: 0;");
+        return;
+    }
+
     if (ui->battery2->styleSheet().contains("yellow")) {
-        ui->battery2->setStyleSheet("background-color: white; border: 1px solid black;");
-        ui->battery3->setStyleSheet("background-color: red; border: 1px solid black;");
+        ui->battery2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0;");
         return;
     }
-    if (ui->battery3->styleSheet().contains("red")) {
-        ui->battery3->setStyleSheet("background-color: white; border: 1px solid black;");
+    if (ui->battery2_2->styleSheet().contains("yellow")) {
+        ui->battery2_2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0; border-top: 0; border-bottom: 0; border-top: 0;");
+        return;
     }
+    if (ui->battery2_3->styleSheet().contains("yellow")) {
+        ui->battery2_3->setStyleSheet("background-color: white; border: 1px solid black; border-top: 0;");
+        ui->battery3->setStyleSheet("background-color: red; border: 1px solid black; border-bottom: 0;");
+        ui->battery3_2->setStyleSheet("background-color: red; border: 1px solid black; border-bottom: 0; border-top: 0;");
+        ui->battery3_3->setStyleSheet("background-color: red; border: 1px solid black; border-top: 0;");
+        return;
+    }
+
+    if (ui->battery3->styleSheet().contains("red")) {
+        ui->battery3->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0;");
+        return;
+    }
+    if (ui->battery3_2->styleSheet().contains("red")) {
+        ui->battery3_2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0; border-top: 0; border-bottom: 0; border-top: 0;");
+        return;
+    }
+    if (ui->battery3_3->styleSheet().contains("red")) {
+        ui->battery3_3->setStyleSheet("background-color: white; border: 1px solid black; border-top: 0;");
+    }
+
     outOfBattery = true;
 }
 
@@ -153,14 +220,11 @@ void MainWindow::giveTreatment()
     QTimer::singleShot(1500, [=]() {
         ui->green_light->setStyleSheet("background-color: white; border: 3px solid green;");
     });
-
-    // Add other logic for changes calculations and whatnot if needed (to show difference after treatment)
 }
 
 void MainWindow::powerButtonClicked()
 {
     if (outOfBattery) {
-        flashBatteries();
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
 
         if (!isOn) {
@@ -210,36 +274,6 @@ void MainWindow::loopChangeRedLight() {
 
     QTimer::singleShot(2000, this, &MainWindow::loopChangeRedLight);
 }
-
-void MainWindow::flashBatteries()
-{
-    ui->battery_top->show();
-    ui->battery1->show();
-    ui->battery2->show();
-    ui->battery3->show();
-
-    QTimer::singleShot(500, this, [=]() {
-        ui->battery_top->hide();
-        ui->battery1->hide();
-        ui->battery2->hide();
-        ui->battery3->hide();
-
-        QTimer::singleShot(500, this, [=]() {
-            ui->battery_top->show();
-            ui->battery1->show();
-            ui->battery2->show();
-            ui->battery3->show();
-
-            QTimer::singleShot(650, this, [=]() {
-                ui->battery_top->hide();
-                ui->battery1->hide();
-                ui->battery2->hide();
-                ui->battery3->hide();
-            });
-        });
-    });
-}
-
 
 void MainWindow::changeRedLight() {
     ui->red_light->setStyleSheet("background-color: red;");

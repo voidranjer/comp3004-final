@@ -90,6 +90,7 @@ border: 3px solid red;</string>
      <font>
       <family>DejaVu Sans</family>
       <pointsize>20</pointsize>
+      <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
      </font>
@@ -298,7 +299,7 @@ border: none;</string>
       <x>740</x>
       <y>545</y>
       <width>31</width>
-      <height>16</height>
+      <height>5</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -322,7 +323,7 @@ border: 1px solid black;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: white; border: 1px solid black;</string>
+     <string notr="true">background-color: green; border: 1px solid black;</string>
     </property>
     <property name="text">
      <string/>
@@ -337,12 +338,14 @@ border: 1px solid black;</string>
       <x>740</x>
       <y>520</y>
       <width>31</width>
-      <height>14</height>
+      <height>5</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color : green;
-border: 1px solid black;</string>
+     <string notr="true">background-color: green;
+border: 1px solid black;
+border-bottom: 0;
+</string>
     </property>
     <property name="text">
      <string/>
@@ -357,12 +360,140 @@ border: 1px solid black;</string>
       <x>740</x>
       <y>533</y>
       <width>31</width>
-      <height>16</height>
+      <height>5</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color : green;
 border: 1px solid black;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery1_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>524</y>
+      <width>31</width>
+      <height>5</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: green;
+border: 1px solid black;
+border-top: 0;
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery1_3">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>528</y>
+      <width>31</width>
+      <height>6</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: green;
+border: 1px solid black;
+border-top: 0;
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery2_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>537</y>
+      <width>31</width>
+      <height>5</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;
+border-top: 0;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery2_3">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>540</y>
+      <width>31</width>
+      <height>6</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;
+border-top: 0;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery3_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>549</y>
+      <width>31</width>
+      <height>5</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;
+border-top: 0;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="battery3_3">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>553</y>
+      <width>31</width>
+      <height>6</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : green;
+border: 1px solid black;
+border-top: 0;</string>
     </property>
     <property name="text">
      <string/>
