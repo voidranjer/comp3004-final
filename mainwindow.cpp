@@ -14,7 +14,9 @@ MainWindow::MainWindow(QWidget *parent)
     pcWindow = new PCWindow(this);
     pcWindow->show();
 
+    // init components
     controller = new NeuresetController(this);
+    eegSimulator = new EEGSimulator(this, ui->customPlot);
 
     connect(ui->powerButton, SIGNAL(released()), this, SLOT (powerButtonClicked()));
     connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
@@ -23,15 +25,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
 
+
     // NEEDS TO BE FIXED !!! @James
-    NeuresetController *controller = new NeuresetController(this);
+    // NeuresetController *controller = new NeuresetController(this);
 
     // CLOCK: Tick the clock
     connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](QDateTime datetime){ ui->datetimeDisplay->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));});
 
     // CLOCK: Update the time picker when first enabling the clock settings page
     connect(ui->tabs, &QTabWidget::currentChanged, ui->dateTimeEdit,
-            [this, controller](int tabIndex) {
+            [=](int tabIndex) {
               // if (tabIndex != 2) return; (trying to not hard code for now, at the cost of efficiency)
               ui->dateTimeEdit->setDateTime(controller->getDatetime());
             });
@@ -48,15 +51,13 @@ MainWindow::MainWindow(QWidget *parent)
     //         });
 
     // CLOCK: Event handler for set_time button
-    connect(ui->set_time, &QPushButton::released, controller, [this, controller](){
+    connect(ui->set_time, &QPushButton::released, controller, [=](){
         controller->setDatetime(ui->dateTimeEdit->dateTime());
     });
 
 
-    // GRAPH: init EEG simulator
-    eegSimulator = new EEGSimulator(this, ui->customPlot);
 
-    // setting initial statis of graph
+    // GRAPH: setting initial statis of graph
     ui->customPlot->xAxis->setRange(0, 4000);
     ui->customPlot->yAxis->setRange(-700, 700);
     ui->customPlot->xAxis->setTickLabels(false);
@@ -64,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->customPlot->yAxis->setTickLabels(false);
     ui->customPlot->yAxis->setTicks(false);
 
-    // add electrodes
+    // GRAPH: add electrodes
     ui->comboBox->addItem("Electrode 1");
     ui->comboBox->addItem("Electrode 2");
     ui->comboBox->addItem("Electrode 3");
@@ -72,7 +73,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox->addItem("Electrode 5");
     ui->comboBox->addItem("Electrode 6");
     ui->comboBox->addItem("Electrode 7");
-
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::handleElectrodeSelection);
 }
 
