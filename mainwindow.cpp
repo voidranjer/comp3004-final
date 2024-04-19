@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     pcWindow = new PCWindow(this);
     pcWindow->show();
 
+    controller = new NeuresetController(this);
+
     connect(ui->powerButton, SIGNAL(released()), this, SLOT (powerButtonClicked()));
     connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
     connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
@@ -21,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
 
-    NeuresetController *controller = new NeuresetController(this); // todo: move to header file
+    // NEEDS TO BE FIXED !!! @James
+    NeuresetController *controller = new NeuresetController(this);
 
     // CLOCK: Tick the clock
     connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](QDateTime datetime){ ui->datetimeDisplay->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));});
@@ -83,6 +86,37 @@ void MainWindow::handleElectrodeSelection(int index) {
     }
 }
 
+void MainWindow::flashBatteries()
+{
+    QList<QWidget *> elements = {ui->battery_top,   ui->battery1,
+                                 ui->battery1_2,    ui->battery1_3,
+                                 ui->battery2,      ui->battery2_2,
+                                 ui->battery2_3,    ui->battery3,
+                                 ui->battery3_2,    ui->battery3_3
+    };
+
+    for (QWidget* element : elements) {
+        element->show();
+    }
+
+    QTimer::singleShot(500, this, [=]() {
+        for (QWidget* element : elements) {
+            element->hide();
+        }
+
+        QTimer::singleShot(500, this, [=]() {
+            for (QWidget* element : elements) {
+                element->show();
+            }
+
+            QTimer::singleShot(650, this, [=]() {
+                for (QWidget* element : elements) {
+                    element->hide();
+                }
+            });
+        });
+    });
+}
 
 void MainWindow::changeMachineState()
 {
@@ -188,7 +222,6 @@ void MainWindow::giveTreatment()
 void MainWindow::powerButtonClicked()
 {
     if (outOfBattery) {
-        flashBatteries();
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
 
         if (!isOn) {
@@ -244,39 +277,6 @@ void MainWindow::loopChangeRedLight() {
 
     QTimer::singleShot(2000, this, &MainWindow::loopChangeRedLight);
 }
-
-void MainWindow::flashBatteries()
-{
-    QList<QWidget *> elements = {ui->battery_top,   ui->battery1,
-                                 ui->battery1_2,    ui->battery1_3,
-                                 ui->battery2,      ui->battery2_2,
-                                 ui->battery2_3,    ui->battery3,
-                                 ui->battery3_2,    ui->battery3_3
-    };
-
-    for (QWidget* element : elements) {
-        element->show();
-    }
-
-    QTimer::singleShot(500, this, [=]() {
-        for (QWidget* element : elements) {
-            element->hide();
-        }
-
-        QTimer::singleShot(500, this, [=]() {
-            for (QWidget* element : elements) {
-                element->show();
-            }
-
-            QTimer::singleShot(650, this, [=]() {
-                for (QWidget* element : elements) {
-                    element->hide();
-                }
-            });
-        });
-    });
-}
-
 
 void MainWindow::changeRedLight() {
     ui->red_light->setStyleSheet("background-color: red;");

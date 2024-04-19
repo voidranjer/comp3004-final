@@ -6,8 +6,6 @@
 NeuresetController::NeuresetController(QObject *parent)
     : QObject{parent}
 {
-    battery = new Battery(this);
-
     // Datetime ticker
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this](){ tickTime(); });

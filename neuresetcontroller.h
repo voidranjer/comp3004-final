@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QDateTime>
-#include "battery.h"
 
 class NeuresetController : public QObject
 {
@@ -13,7 +12,6 @@ public:
     QDateTime getDatetime();
 
 private:
-
     /*
      * Device Datetime
      * - To calculate the device datetime, take (QDateTime::currentDateTime() - timeOfSetting + baseDatetime)
@@ -22,7 +20,6 @@ private:
     QDateTime baseDatetime = QDateTime::currentDateTime(); // to store the custom time that the user sets
     void tickTime(); // tick the clock
     bool clockSettingActive = false;
-    Battery* battery;
 
 signals:
     void timeChanged(QDateTime datetime); // emitted every second
