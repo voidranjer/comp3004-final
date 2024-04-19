@@ -89,7 +89,10 @@ void MainWindow::changeMachineState()
     isOn = !isOn;
      QList<QWidget *> elements = {ui->battery1,      ui->battery2,
                                   ui->battery3,      ui->battery_top,
-                                  ui->neuresetBox
+                                  ui->neuresetBox,   ui->battery1_2,
+                                  ui->battery1_3,    ui->battery2_2,
+                                  ui->battery2_3,    ui->battery3_2,
+                                  ui->battery3_3
      };
 
      for (QWidget* element : elements) {
@@ -99,12 +102,6 @@ void MainWindow::changeMachineState()
              element->hide();
          }
      }
-
-//    if (isOn) {
-//        ui->neuresetBox->show();
-//    } else {
-//        ui->neuresetBox->hide();
-//    }
 
     if (inSession) {
         inSession = false;
@@ -124,20 +121,58 @@ void MainWindow::changeMachineState()
 
 void MainWindow::reduceBattery()
 {
+    if (ui->battery_top->styleSheet().contains("green")) {
+        ui->battery_top->setStyleSheet("background-color: white; border: 1px solid black;");
+        return;
+    }
+
     if (ui->battery1->styleSheet().contains("green")) {
-        ui->battery1->setStyleSheet("background-color: white; border: 1px solid black;");
-        ui->battery2->setStyleSheet("background-color: yellow; border: 1px solid black;");
-        ui->battery3->setStyleSheet("background-color: yellow; border: 1px solid black;");
+        ui->battery1->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0;");
         return;
     }
+    if (ui->battery1_2->styleSheet().contains("green")) {
+        ui->battery1_2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0; border-top: 0;");
+        return;
+    }
+    if (ui->battery1_3->styleSheet().contains("green")) {
+        ui->battery1_3->setStyleSheet("background-color: white; border: 1px solid black; border-top: 0;");
+        ui->battery2->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0;");
+        ui->battery2_2->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0; border-top: 0;");
+        ui->battery2_3->setStyleSheet("background-color: yellow; border: 1px solid black; border-top: 0;");
+        ui->battery3->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0;");
+        ui->battery3_2->setStyleSheet("background-color: yellow; border: 1px solid black; border-bottom: 0; border-top: 0;");
+        ui->battery3_3->setStyleSheet("background-color: yellow; border: 1px solid black; border-top: 0;");
+        return;
+    }
+
     if (ui->battery2->styleSheet().contains("yellow")) {
-        ui->battery2->setStyleSheet("background-color: white; border: 1px solid black;");
-        ui->battery3->setStyleSheet("background-color: red; border: 1px solid black;");
+        ui->battery2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0;");
         return;
     }
-    if (ui->battery3->styleSheet().contains("red")) {
-        ui->battery3->setStyleSheet("background-color: white; border: 1px solid black;");
+    if (ui->battery2_2->styleSheet().contains("yellow")) {
+        ui->battery2_2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0; border-top: 0; border-bottom: 0; border-top: 0;");
+        return;
     }
+    if (ui->battery2_3->styleSheet().contains("yellow")) {
+        ui->battery2_3->setStyleSheet("background-color: white; border: 1px solid black; border-top: 0;");
+        ui->battery3->setStyleSheet("background-color: red; border: 1px solid black; border-bottom: 0;");
+        ui->battery3_2->setStyleSheet("background-color: red; border: 1px solid black; border-bottom: 0; border-top: 0;");
+        ui->battery3_3->setStyleSheet("background-color: red; border: 1px solid black; border-top: 0;");
+        return;
+    }
+
+    if (ui->battery3->styleSheet().contains("red")) {
+        ui->battery3->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0;");
+        return;
+    }
+    if (ui->battery3_2->styleSheet().contains("red")) {
+        ui->battery3_2->setStyleSheet("background-color: white; border: 1px solid black; border-bottom: 0; border-top: 0; border-bottom: 0; border-top: 0;");
+        return;
+    }
+    if (ui->battery3_3->styleSheet().contains("red")) {
+        ui->battery3_3->setStyleSheet("background-color: white; border: 1px solid black; border-top: 0;");
+    }
+
     outOfBattery = true;
 }
 
