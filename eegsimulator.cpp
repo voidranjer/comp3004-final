@@ -115,6 +115,10 @@ void EEGSimulator::beginFeedback()
 
     qDebug() << "Administering feedback... ( ROUND: " << therapyRound + 1 << ")";
 
+    // FUNKY MULTITHREADING OUT-OF-ORDER EXECUTION ISSUE
+    // possible fix: pass in `therapyRound` as an argument (pass-by-value) to the lambda function (try not to use implicit `this->therapyRound`)
+    // possible problem: incomplete lambdaFunction context capture
+
     connect(feedbackTimer, &QTimer::timeout, this, &EEGSimulator::endFeedback);
     feedbackTimer->start(FEEDBACK_DURATION);
 }
