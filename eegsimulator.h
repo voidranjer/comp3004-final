@@ -38,7 +38,7 @@ private:
     void setupEEGPlot();
     void updateEEGPlot();
 
-    double generateEEGData(double currentTime, Electrode *electrode, double offset);
+    double generateEEGData(double currentTime, Electrode *electrode, double offset, double amplitudeFactor = 1);
 
 signals:
 

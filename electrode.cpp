@@ -18,9 +18,15 @@ void Electrode::setBaseline(double baseline)
 
 QColor Electrode::getColor() { return color; }
 
-double Electrode::getFreqSum() { return delta + theta + alpha + beta + gamma; }
+double Electrode::getFreqSum() {
+    double noiseFactor = QRandomGenerator::global()->generateDouble() * NOISE_FACTOR + 0.1;
+    return (delta + theta + alpha + beta + gamma) * noiseFactor;
+}
 
-double Electrode::getAmplitudeSum() { return deltaAmplitude + thetaAmplitude + alphaAmplitude + betaAmplitude + gammaAmplitude; }
+double Electrode::getAmplitudeSum() {
+    double noiseFactor = QRandomGenerator::global()->generateDouble() * NOISE_FACTOR + 0.1;
+    return (deltaAmplitude + thetaAmplitude + alphaAmplitude + betaAmplitude + gammaAmplitude) * noiseFactor;
+}
 
 double Electrode::getDominantFrequency()
 {

@@ -30,7 +30,8 @@ EEGSimulator::EEGSimulator(QObject *parent, QCustomPlot *plotWidget)
 
     m_eegUpdateTimer = new QTimer(this);
     connect(m_eegUpdateTimer, &QTimer::timeout, this, &EEGSimulator::updateEEGPlot);
-    m_eegUpdateTimer->start(GRAPH_SPEED);
+    m_eegUpdateTimer->start(1000 / 60);
+    // m_eegUpdateTimer->start(100);
 }
 
 EEGSimulator::~EEGSimulator()
@@ -79,7 +80,7 @@ void EEGSimulator::updateEEGPlot() {
         m_customPlot->graph(i)->addData(currentTime, eegValue);
     }
 
-    m_customPlot->xAxis->setRange(currentTime - 3000, currentTime);
+    m_customPlot->xAxis->setRange(currentTime - GRAPH_RANGE, currentTime);
     m_customPlot->replot();
 }
 
@@ -97,9 +98,9 @@ void EEGSimulator::selectElectrode(int electrodeIndex) {
     m_customPlot->replot();
 }
 
-double EEGSimulator::generateEEGData(double currentTime, Electrode *electrode, double offset) {
+double EEGSimulator::generateEEGData(double currentTime, Electrode *electrode, double offset, double amplitudeFactor) {
     double frequency = electrode->getFreqSum();
-    double totalAmplitude = electrode->getAmplitudeSum();
+    double totalAmplitude = electrode->getAmplitudeSum() * amplitudeFactor;
     frequency += offset;
     return totalAmplitude * sin(2 * M_PI * frequency * currentTime / 1000.0);
 }
@@ -151,7 +152,7 @@ void EEGSimulator::startSession() {
             double feedbackStartTime = currentTime;
 
             for (int j = 0; j < NUM_ELECTRODES; ++j) {
-                double eegValue = generateEEGData(feedbackStartTime, electrode, feedbackFrequency);
+                double eegValue = generateEEGData(feedbackStartTime, electrode, feedbackFrequency, EXAGGERATE_FACTOR);
                 m_customPlot->graph(j)->addData(feedbackStartTime, eegValue);
             }
 

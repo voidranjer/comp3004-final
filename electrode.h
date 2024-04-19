@@ -18,8 +18,9 @@ public:
     double getDominantFrequency();
 
     // Used in constructor to generate random amplitudes
-    const int AMPLITUDE_MIN = 10;
-    const int AMPLITUDE_MAX = 100;
+    const int AMPLITUDE_MIN = 5;
+    const int AMPLITUDE_MAX = 150;
+    const double NOISE_FACTOR = 1.5;
 private:
     // others
     QColor color;
