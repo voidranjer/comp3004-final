@@ -192,6 +192,7 @@ void EEGSimulator::calculateBaseline() {
 
 void EEGSimulator::startSession() {
     observationTimer->start(OBSERVE_DURATION);
+    therapyRound = 0; // reset rounds
     inSession = true;
     qDebug() << "Starting therapy session...";
 }
