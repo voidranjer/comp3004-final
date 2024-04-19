@@ -17,7 +17,7 @@ public:
     double getAmplitudeSum();
     double getDominantFrequency();
 
-    // Used in constructor to generate random amplitudes
+    // Noise
     const int AMPLITUDE_MIN = 5;
     const int AMPLITUDE_MAX = 150;
     const double NOISE_FACTOR = 1.5;
