@@ -21,7 +21,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
     connect(ui->end_session, SIGNAL(released()), this, SLOT (endSession()));
 
-    changeMachineState(); // to hide the objects that shouldn't be visible when the device is powered off
+    // to hide the objects that shouldn't be visible when the device is powered off
+    QList<QWidget *> elements = {ui->battery1,      ui->battery2,
+                                  ui->battery3,      ui->battery_top,
+                                  ui->neuresetBox,   ui->battery1_2,
+                                  ui->battery1_3,    ui->battery2_2,
+                                  ui->battery2_3,    ui->battery3_2,
+                                  ui->battery3_3
+     };
+
+     for (QWidget* element : elements) {
+         element->hide();
+     }
+
 
     // NEEDS TO BE FIXED !!! @James
     NeuresetController *controller = new NeuresetController(this);
@@ -124,7 +136,7 @@ void MainWindow::flashBatteries()
 void MainWindow::changeMachineState()
 {
     isOn = !isOn;
-     QList<QWidget *> elements = {ui->battery1,      ui->battery2,
+    QList<QWidget *> elements = {ui->battery1,      ui->battery2,
                                   ui->battery3,      ui->battery_top,
                                   ui->neuresetBox,   ui->battery1_2,
                                   ui->battery1_3,    ui->battery2_2,

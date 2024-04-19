@@ -36,7 +36,7 @@ private:
     Ui::MainWindow *ui;
     QCustomPlot *customPlot;
     bool outOfBattery = false;
-    bool isOn = true; // will go to false when program is setting up
+    bool isOn = false;
     void changeRedLight();
     void loopChangeRedLight();
     void reduceBattery();
