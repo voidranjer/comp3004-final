@@ -6,43 +6,49 @@
 #include <QDateTime>
 #include <QRandomGenerator>
 #include "qcustomplot.h"
+#include "electrode.h"
+#include "defs.h"
 
 class EEGSimulator : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit EEGSimulator(QCustomPlot *plotWidget, int numElectrodes, QObject *parent = nullptr);
-    void selectElectrode(int electrodeIndex);
+    explicit EEGSimulator(QObject *parent, QCustomPlot *plotWidget);
     ~EEGSimulator();
-    double calculateDominantFrequency(double currentTime, int electrodeIndex);
+    void selectElectrode(int electrodeIndex);
     void calculateBaseline();
-    void startTreatment();
+    void startSession();
+    void endSession();
+    bool toggleContact();
+    bool getInContact() const;
+    bool getInSession() const; // note: do NOT make a setter for inSession (this will mess up the sequence). use `startSession()` and `endSession()` instead.
 
 private:
+    Electrode* electrodes[NUM_ELECTRODES];
+
+    // Qt
     QCustomPlot *m_customPlot;
     QTimer *m_eegUpdateTimer;
-    int m_numElectrodes = 0;
-    QVector<double> m_baselineFrequencies;
+    QTimer *observationTimer;
+    QTimer *feedbackTimer;
 
-    QVector<double> deltas;
-    QVector<double> thetas;
-    QVector<double> alphas;
-    QVector<double> betas;
-    QVector<double> gammas;
+    // Data
+    double m_baselineFrequencies[NUM_ELECTRODES];
 
-    QVector<double> deltaAmplitudes;
-    QVector<double> thetaAmplitudes;
-    QVector<double> alphaAmplitudes;
-    QVector<double> betaAmplitudes;
-    QVector<double> gammaAmplitudes;
-
+    // State
+    bool inContact = false;
+    bool inSession = false;
+    bool isFeedback = false;
     int m_currentElectrodeIndex;
+    int therapyRound = 0; // limit: NUM_ROUNDS in defs.h
 
+    // Helper functions
     void setupEEGPlot();
     void updateEEGPlot();
-
-    double generateEEGData(double currentTime, int electrodeIndex, double offset);
+    void beginFeedback();
+    void endFeedback(); // automatically called by beginFeedback
+    double generateEEGData(double currentTime, Electrode *electrode, double offset, double amplitudeFactor = 1);
 
 signals:
 

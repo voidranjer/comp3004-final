@@ -52,6 +52,10 @@ MainWindow::MainWindow(QWidget *parent)
         controller->setDatetime(ui->dateTimeEdit->dateTime());
     });
 
+
+    // GRAPH: init EEG simulator
+    eegSimulator = new EEGSimulator(this, ui->customPlot);
+
     // setting initial statis of graph
     ui->customPlot->xAxis->setRange(0, 4000);
     ui->customPlot->yAxis->setRange(-700, 700);
@@ -74,7 +78,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete eegSimulator;
     delete ui;
 }
 
@@ -137,8 +140,8 @@ void MainWindow::changeMachineState()
          }
      }
 
-    if (inSession) {
-        inSession = false;
+    if (eegSimulator->getInSession()) {
+        eegSimulator->endSession();
         reduceBattery();
     }
 
@@ -147,7 +150,7 @@ void MainWindow::changeMachineState()
     if (!isOn) {
         ui->start_session->setEnabled(false);
 
-        if (inContact) {
+        if (eegSimulator->getInContact()) {
             breakContact();
         }
     }
@@ -246,22 +249,16 @@ void MainWindow::breakContact() {
         return;
     }
 
-    inContact = !inContact;
+    bool inContact = eegSimulator->toggleContact();
+    bool inSession = eegSimulator->getInSession();
 
     if (inContact) {
         ui->blue_light->setStyleSheet("background-color: blue;");
         ui->break_contact->setText("Break Contact");
         ui->start_session->setEnabled(true);
-
-        eegSimulator = new EEGSimulator(ui->customPlot, 7, this);
-
     } else {
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
         ui->break_contact->setText("Make Contact");
-        if (eegSimulator) {
-            delete eegSimulator;
-            eegSimulator = nullptr;
-        }
         ui->start_session->setEnabled(false);
         if (inSession) {
             loopChangeRedLight();
@@ -270,7 +267,7 @@ void MainWindow::breakContact() {
 }
 
 void MainWindow::loopChangeRedLight() {
-    if (!inSession || inContact || !isOn) {
+    if (!eegSimulator->getInSession() || eegSimulator->getInContact() || !isOn) {
         return;
     }
     changeRedLight();
@@ -293,11 +290,9 @@ void MainWindow::startSession()
         return;
     }
 
-    inSession = true;
-
     QList<QWidget*> elements = {ui->start_session, ui->past_session, ui->change_date};
     if (eegSimulator) {
-        eegSimulator->startTreatment();
+        eegSimulator->startSession();
     }
     for (QWidget* element : elements) {
         element->hide();
@@ -308,7 +303,7 @@ void MainWindow::startSession()
 
 void MainWindow::endSession()
 {
-    inSession = false;
+    eegSimulator->endSession();
     reduceBattery();
 
     QList<QWidget*> elements = {ui->start_session, ui->past_session, ui->change_date};

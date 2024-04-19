@@ -9,22 +9,26 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    electrode.cpp \
     logentry.cpp \
     eegsimulator.cpp \
     main.cpp \
     mainwindow.cpp \
     neuresetcontroller.cpp \
     qcustomplot.cpp \
-    pcwindow.cpp
+    pcwindow.cpp \
+    sessionlogger.cpp
 
 HEADERS += \
     defs.h \
+    electrode.h \
     logentry.h \
     eegsimulator.h \
     mainwindow.h \
     neuresetcontroller.h \
     pcwindow.h \
-    qcustomplot.h
+    qcustomplot.h \
+    sessionlogger.h
 
 FORMS += \
     mainwindow.ui \
