@@ -35,8 +35,12 @@ EEGSimulator::EEGSimulator(QObject *parent, QCustomPlot *plotWidget)
 
     // Init timers
     observationTimer = new QTimer(this);
+    observationTimer->setSingleShot(true);
+    connect(observationTimer, &QTimer::timeout, this, &EEGSimulator::beginFeedback);
+
     feedbackTimer = new QTimer(this);
-    // connect(observationTimer, &QTimer::timeout, this, &EEGSimulator::beginFeedback);
+    feedbackTimer->setSingleShot(true);
+    connect(feedbackTimer, &QTimer::timeout, this, &EEGSimulator::endFeedback);
 
     waiting = false;
 }
@@ -126,12 +130,10 @@ void EEGSimulator::beginFeedback()
         qDebug() << "=============ROUND " << therapyRound << "– SENDING FEEDBACK (for" << FEEDBACK_DURATION << "ms)=============";
     }
 
-    feedbackTimer->singleShot(FEEDBACK_DURATION, this, [this](){
-        endFeedback(therapyRound);
-    });
+    feedbackTimer->start(FEEDBACK_DURATION);
 }
 
-void EEGSimulator::endFeedback(int therapyRound)
+void EEGSimulator::endFeedback()
 {
     QVector<double> OFFSETS = {5, 10, 15, 20};
 
@@ -139,7 +141,8 @@ void EEGSimulator::endFeedback(int therapyRound)
 
     if (therapyRound == NUM_ROUNDS) {
         qDebug() << "FINAL MEASUREMENTS COMPLETE. COMPUTING FINAL BASELINE... FINAL BASELINE:" << calculateBaseline();
-        observationTimer->singleShot(OBSERVE_DURATION, this, [](){ qDebug() << "TODO: HANDLE FINAL MEASUREMENTS HERE"; });
+        QTimer timer;
+        timer.singleShot(OBSERVE_DURATION, this, [](){ qDebug() << "TODO: HANDLE FINAL MEASUREMENTS HERE"; });
         return;
     }
 
@@ -163,9 +166,8 @@ void EEGSimulator::endFeedback(int therapyRound)
     }
 
 
-    // observationTimer->start(OBSERVE_DURATION);
     qDebug() << "=============ROUND " << therapyRound + 1 << "– BEGIN MEASUREMENT (for" << OBSERVE_DURATION << "ms)=============";
-    observationTimer->singleShot(OBSERVE_DURATION, this, &EEGSimulator::beginFeedback);
+    observationTimer->start(OBSERVE_DURATION);
 }
 
 void EEGSimulator::selectElectrode(int electrodeIndex) {
@@ -201,7 +203,7 @@ void EEGSimulator::startSession() {
     qDebug() << "Starting new therapy session...";
 
     qDebug() << "=============ROUND 1 – BEGIN MEASUREMENT (for " << OBSERVE_DURATION << "ms)=============";
-    observationTimer->singleShot(OBSERVE_DURATION, this, &EEGSimulator::beginFeedback);
+    observationTimer->start(OBSERVE_DURATION);
 }
 
 void EEGSimulator::endSession() {
