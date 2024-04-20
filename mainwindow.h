@@ -10,6 +10,8 @@
 #include <eegsimulator.h>
 #include "neuresetcontroller.h"
 
+class NeuresetController;
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -24,6 +26,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QList<QWidget *> static createBattery();
+    bool getInSession();
+    bool getIsOn();
 
 public slots:
     void powerButtonClicked();

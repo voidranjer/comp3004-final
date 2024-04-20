@@ -3,15 +3,15 @@
 #include <QDebug>
 #include "defs.h"
 
-NeuresetController::NeuresetController(QObject *parent, QList<QLabel *> elements)
-    : QObject{parent}
+NeuresetController::NeuresetController(QObject *parent, QList<QLabel *> elements, MainWindow* main)
+    : QObject{parent}, main(main)
 {
     // Datetime ticker
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this](){ tickTime(); });
     timer->start(CLOCK_TICK);
 
-    battery = new Battery(this, elements);
+    battery = new Battery(this, elements, this);
 }
 
 QDateTime NeuresetController::getDatetime()
@@ -51,3 +51,14 @@ void NeuresetController::toggleClockSetting()
     clockSettingActive = !clockSettingActive;
     emit clockSettingActiveChanged(clockSettingActive);
 }
+
+bool NeuresetController::getInSession() {
+    return main->getInSession();
+}
+
+bool NeuresetController::getIsOn()
+{
+    return main->getIsOn();
+}
+
+

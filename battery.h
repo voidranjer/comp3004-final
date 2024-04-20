@@ -6,13 +6,16 @@
 #include "defs.h"
 #include <QTimer>
 #include <QLabel>
+#include "neuresetcontroller.h"
+
+class NeuresetController;
 
 class Battery : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit Battery(QObject *parent = nullptr, QList<QLabel *> elements = {});
+    explicit Battery(QObject *parent = nullptr, QList<QLabel *> elements = {}, NeuresetController* controller = nullptr);
     bool getOutOfBattery();
 
 signals:
@@ -27,6 +30,7 @@ private:
     int batteryAnnouncement;
     QList<QLabel *> elements;
     void tickTime();
+    NeuresetController* controller;
 
 };
 

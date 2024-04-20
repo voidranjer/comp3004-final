@@ -5,15 +5,22 @@
 #include <QDateTime>
 #include "battery.h"
 #include <QLabel>
+#include "mainwindow.h"
+
+class Battery;
+
+class MainWindow;
 
 class NeuresetController : public QObject
 {
     Q_OBJECT
 public:
-    explicit NeuresetController(QObject *parent = nullptr, QList<QLabel *> elements = {});
+    explicit NeuresetController(QObject *parent = nullptr, QList<QLabel *> elements = {}, MainWindow* main = nullptr);
     QDateTime getDatetime();
     bool getOutOfBattery();
     void flashBatteries();
+    bool getInSession();
+    bool getIsOn();
 
 private:
     /*
@@ -25,6 +32,7 @@ private:
     void tickTime(); // tick the clock
     bool clockSettingActive = false;
     Battery* battery;
+    MainWindow* main;
 
 signals:
     void timeChanged(QDateTime datetime); // emitted every second

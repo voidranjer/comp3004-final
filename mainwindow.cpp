@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::init()
 {
+    // init components
     QList<QLabel *> elements = {ui->battery_top,   ui->battery1,
                                  ui->battery1_2,    ui->battery1_3,
                                  ui->battery2,      ui->battery2_2,
@@ -27,8 +28,7 @@ void MainWindow::init()
                                  ui->battery3_2,    ui->battery3_3
     };
 
-    // init components
-    controller = new NeuresetController(this, elements);
+    controller = new NeuresetController(this, elements, this);
     eegSimulator = new EEGSimulator(this, ui->customPlot);
 
     // connect buttons
@@ -98,7 +98,9 @@ void MainWindow::changeMachineState()
                                   ui->neuresetBox,   ui->battery1_2,
                                   ui->battery1_3,    ui->battery2_2,
                                   ui->battery2_3,    ui->battery3_2,
-                                  ui->battery3_3,    ui->datetimeDisplay
+                                  ui->battery3_3,    ui->datetimeDisplay,
+                                  ui->start_session
+
      };
 
      for (QWidget* element : elements) {
@@ -129,6 +131,15 @@ void MainWindow::changeMachineState()
             breakContact();
         }
     }
+}
+
+bool MainWindow::getInSession() {
+    return eegSimulator->getInSession();
+}
+
+bool MainWindow::getIsOn()
+{
+    return isOn;
 }
 
 void MainWindow::giveTreatment()

@@ -1,7 +1,7 @@
 #include "battery.h"
 
-Battery::Battery(QObject *parent, QList<QLabel *> elements)
-    : QObject{parent}, elements(elements)
+Battery::Battery(QObject *parent, QList<QLabel *> elements, NeuresetController* controller)
+    : QObject{parent}, elements(elements), controller(controller)
 {
     outOfBattery = false;
 
@@ -106,12 +106,18 @@ void Battery::flashBatteries()
 
 void Battery::tickTime()
 {
+    if (!controller->getIsOn()) {
+        return;
+    }
+
     if (outOfBattery) {
         return;
     }
 
-    //    TODO: if in session x2
-    //    TODO: don't decrease if power off
+    if (controller->getInSession()) {
+        --batteryLife;
+    }
+
     --batteryLife;
 
     int batteryPercentage = (batteryLife * 100) / BATTERY_LIFE;
