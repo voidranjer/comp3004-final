@@ -28,6 +28,7 @@ public:
 
 signals:
     void administerFeedback();
+    void sessionCompleted(double startingBaseline, double endingBaseline);
 
 private:
     Electrode* electrodes[NUM_ELECTRODES];
@@ -40,6 +41,7 @@ private:
 
     // Data
     double m_baselineFrequencies[NUM_ELECTRODES];
+    double startingBaseline;
 
     // State
     bool inContact = false;
