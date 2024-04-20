@@ -225,8 +225,18 @@ bool EEGSimulator::getInSession() const
     return inSession;
 }
 
+void EEGSimulator::pauseTreatment() {
+    if (inSession && !waiting && !isFeedback) {
+        observationTimer->stop();
+        isPaused = true;
+        qDebug() << "Treatment paused.";
+    }
+}
 
-
-
-
-
+void EEGSimulator::continueTreatment() {
+    if (inSession && isPaused && !isFeedback) {
+        observationTimer->start();
+        isPaused = false;
+        qDebug() << "Treatment resumed.";
+    }
+}

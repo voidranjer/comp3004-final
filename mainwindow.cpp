@@ -194,6 +194,8 @@ void MainWindow::breakContact() {
         ui->blue_light->setStyleSheet("background-color: blue;");
         ui->break_contact->setText("Break Contact");
         ui->start_session->setEnabled(true);
+        eegSimulator->continueTreatment();
+
         if (timer != nullptr) {
             timer->start();
         }
@@ -201,7 +203,13 @@ void MainWindow::breakContact() {
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
         ui->break_contact->setText("Make Contact");
         ui->start_session->setEnabled(false);
-
+        eegSimulator->pauseTreatment();
+        qDebug() << "You have 5 seconds to reconnect contact with patient.";
+        QTimer::singleShot(5000, [=]() {
+            if (!eegSimulator->getInContact()) {
+                endSession();
+            }
+        });
         if (timer != nullptr) {
             timer->stop();
         }
@@ -211,6 +219,7 @@ void MainWindow::breakContact() {
             contactTimer = new QTimer(this);
             connect(contactTimer, &QTimer::timeout, this, [this](){ changeRedLight(); });
             contactTimer->start(CLOCK_TICK);
+
         }
     }
 }
@@ -311,6 +320,7 @@ void MainWindow::pauseSession()
     pauseCount = 0;
     pauseTimer = new QTimer(this);
     connect(pauseTimer, &QTimer::timeout, this, [this](){ countInactivity(); });
+    eegSimulator->pauseTreatment();
     pauseTimer->start(CLOCK_TICK);
 }
 
@@ -319,5 +329,6 @@ void MainWindow::resumeSession()
     ui->pause_session->show();
     ui->resume_session->hide();
     timer->start();
+    eegSimulator->continueTreatment();
     pauseTimer->stop();
 }

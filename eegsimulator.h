@@ -23,6 +23,8 @@ public:
     bool toggleContact();
     bool getInContact() const;
     bool getInSession() const; // note: do NOT make a setter for inSession (this will mess up the sequence). use `startSession()` and `endSession()` instead.
+    void pauseTreatment();
+    void continueTreatment();
 
 signals:
     void administerFeedback();
@@ -43,6 +45,7 @@ private:
     bool inContact = false;
     bool inSession = false;
     bool isFeedback = false;
+    bool isPaused = false;
     int m_currentElectrodeIndex;
     int therapyRound = 0; // limit: NUM_ROUNDS in defs.h
 
