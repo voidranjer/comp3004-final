@@ -24,15 +24,15 @@ double Electrode::getFreqSum() {
     return (delta + theta + alpha + beta + gamma) * noiseFactor;
 }
 
-double Electrode::getAmplitudeSum() {
-    double noiseFactor = QRandomGenerator::global()->generateDouble() * NOISE_FACTOR;
+double Electrode::getAmplitudeSum(bool withoutNoise) {
+    double noiseFactor = withoutNoise ? 1 : QRandomGenerator::global()->generateDouble() * NOISE_FACTOR;
     return (deltaAmplitude + thetaAmplitude + alphaAmplitude + betaAmplitude + gammaAmplitude) * noiseFactor;
 }
 
 double Electrode::getDominantFrequency()
 {
 
-    double totalAmplitude = getAmplitudeSum();
+    double totalAmplitude = getAmplitudeSum(true);
 
     double dominantFrequency = ((delta * deltaAmplitude) + (beta * betaAmplitude) +
                                 (alpha * alphaAmplitude) + (gamma * gammaAmplitude) +

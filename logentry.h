@@ -3,17 +3,16 @@
 
 #include <QObject>
 #include <QDateTime>
-#include "defs.h"
 
 class LogEntry : public QObject
 {
     Q_OBJECT
 public:
-    explicit LogEntry(QObject *parent = nullptr, QDateTime timestamp = QDateTime::currentDateTime(), double startingBaselines[NUM_ELECTRODES] = {0}, double endingBaselines[NUM_ELECTRODES] = {0});
+    explicit LogEntry(QObject *parent, QDateTime timestamp, double startingBaseline, double endingBaseline);
 private:
     QDateTime timestamp;
-    double startingBaselines[NUM_ELECTRODES];
-    double endingBaselines[NUM_ELECTRODES];
+    double startingBaseline;
+    double endingBaseline;
 signals:
 };
 

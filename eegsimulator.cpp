@@ -114,15 +114,14 @@ void EEGSimulator::beginFeedback()
 
     emit administerFeedback();
 
-    // this does nothing for now.
-    // calculateBaseline();
-
     // clear previous feedback graph (to prevent jumps in the line)
     m_customPlot->graph(NUM_ELECTRODES)->data()->clear();
 
     therapyRound++;
 
     if (therapyRound < NUM_ROUNDS) {
+        qDebug() << "Calculating baseline... BASELINE CALCULATED:" << calculateBaseline();
+
         qDebug() << "Administering feedback... ( ROUND: " << therapyRound << ")";
         qDebug() << "=============ROUND " << therapyRound << "– SENDING FEEDBACK (for" << FEEDBACK_DURATION << "ms)=============";
     }
@@ -139,7 +138,7 @@ void EEGSimulator::endFeedback(int therapyRound)
     isFeedback = false;
 
     if (therapyRound == NUM_ROUNDS) {
-        qDebug() << "FINAL MEASUREMENTS COMPLETE. COMPUTING FINAL BASELINE...";
+        qDebug() << "FINAL MEASUREMENTS COMPLETE. COMPUTING FINAL BASELINE... FINAL BASELINE:" << calculateBaseline();
         observationTimer->singleShot(OBSERVE_DURATION, this, [](){ qDebug() << "TODO: HANDLE FINAL MEASUREMENTS HERE"; });
         return;
     }
@@ -192,13 +191,8 @@ double EEGSimulator::generateEEGData(double currentTime, Electrode *electrode, d
 
 
 
-void EEGSimulator::calculateBaseline() {
-    QTimer::singleShot(1000, this, [=]() {
-        for (int i = 0; i < NUM_ELECTRODES; ++i) {
-            double dominantFrequency = electrodes[i]->getDominantFrequency();
-            m_baselineFrequencies[i] = dominantFrequency;
-        }
-    });
+double EEGSimulator::calculateBaseline() {
+    return electrodes[m_currentElectrodeIndex]->getDominantFrequency();
 }
 
 void EEGSimulator::startSession() {

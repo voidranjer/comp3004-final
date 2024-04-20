@@ -14,7 +14,7 @@ public:
     // Getters
     QColor getColor();
     double getFreqSum();
-    double getAmplitudeSum();
+    double getAmplitudeSum(bool withoutNoise = false);
     double getDominantFrequency();
 
     // Noise

@@ -17,7 +17,7 @@ public:
     explicit EEGSimulator(QObject *parent, QCustomPlot *plotWidget);
     ~EEGSimulator();
     void selectElectrode(int electrodeIndex);
-    void calculateBaseline();
+    double calculateBaseline();
     void startSession();
     void endSession();
     bool toggleContact();
