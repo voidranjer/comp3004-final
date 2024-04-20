@@ -153,9 +153,10 @@ bool MainWindow::getIsOn()
 void MainWindow::giveTreatment()
 {
     ui->green_light->setStyleSheet("background-color: green;");
-
+    ui->pause_session->setEnabled(false);
     QTimer::singleShot(1000, [=]() {
         ui->green_light->setStyleSheet("background-color: white; border: 3px solid green;");
+        ui->pause_session->setEnabled(true);
     });
 }
 
