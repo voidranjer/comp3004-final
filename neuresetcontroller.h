@@ -47,6 +47,7 @@ public slots:
     void setDatetime(QDateTime datetime); // to set the device datetime
     void toggleClockSetting();
     void turnOff();
+    void lowBattery();
     void handleSessionCompleted(double startingBaseline, double endingBaseline);
 };
 

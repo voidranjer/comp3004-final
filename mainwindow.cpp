@@ -115,7 +115,7 @@ void MainWindow::changeMachineState()
                                   ui->start_session
 
      };
-
+     ui->batteryLow->hide();
      for (QWidget* element : elements) {
          if (isOn) {
              element->show();
@@ -182,6 +182,11 @@ void MainWindow::powerButtonClicked()
         button->setStyleSheet("QPushButton {color: red; border: none;}");
         changeMachineState();
     }
+}
+
+void MainWindow::lowBattery()
+{
+    ui->batteryLow->show();
 }
 
 void MainWindow::breakContact() {

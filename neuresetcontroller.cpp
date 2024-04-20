@@ -79,3 +79,7 @@ void NeuresetController::turnOff()
     return main->powerButtonClicked();
 }
 
+void NeuresetController::lowBattery()
+{
+    return main->lowBattery();
+}

@@ -104,6 +104,7 @@ void Battery::flashBatteries()
 
 }
 
+
 void Battery::tickTime()
 {
     if (!controller->getIsOn()) {
@@ -130,6 +131,7 @@ void Battery::tickTime()
         if (batteryAnnouncement == 20){
             qDebug() << "Battery life now at" << batteryAnnouncement << "%";
             qDebug() << "Battery life LOW please plug in device";
+            controller->lowBattery();
         }
         else if (batteryAnnouncement == 10){
             qDebug() << "Battery life now at" << batteryAnnouncement << "%";

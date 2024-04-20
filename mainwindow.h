@@ -39,6 +39,7 @@ public slots:
     void pauseSession();
     void resumeSession();
     void addLogEntry(QString entry);
+    void lowBattery();
 
 private:
     Ui::MainWindow *ui;
