@@ -111,6 +111,9 @@ void Battery::tickTime()
     }
 
     if (outOfBattery) {
+        qDebug() << "Battery Life is now 0!";
+        qDebug() << "Device is now off: Please charge the device!";
+        controller->turnOff();
         return;
     }
 

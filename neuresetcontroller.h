@@ -46,6 +46,7 @@ signals:
 public slots:
     void setDatetime(QDateTime datetime); // to set the device datetime
     void toggleClockSetting();
+    void turnOff();
     void handleSessionCompleted(double startingBaseline, double endingBaseline);
 };
 

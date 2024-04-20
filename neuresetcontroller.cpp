@@ -74,4 +74,8 @@ bool NeuresetController::getIsOn()
     return main->getIsOn();
 }
 
+void NeuresetController::turnOff()
+{
+    return main->powerButtonClicked();
+}
 
