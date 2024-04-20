@@ -39,6 +39,8 @@ void MainWindow::init()
     connect(ui->pause_session, SIGNAL(released()), this, SLOT (pauseSession()));
     connect(ui->resume_session, SIGNAL(released()), this, SLOT (resumeSession()));
 
+    connect(eegSimulator, &EEGSimulator::administerFeedback, this, [this](){giveTreatment();});
+
     // to hide the objects that shouldn't be visible when the device is powered off
     changeMachineState();
 
@@ -127,9 +129,6 @@ void MainWindow::changeMachineState()
     ui->end_session->hide();
     ui->pause_session->hide();
     ui->resume_session->hide();
-    ui->band_label->hide();
-    ui->ending_label->hide();
-    ui->starting_label->hide();
     ui->session_progress->hide();
     ui->session_timer->hide();
 
@@ -155,7 +154,7 @@ void MainWindow::giveTreatment()
 {
     ui->green_light->setStyleSheet("background-color: green;");
 
-    QTimer::singleShot(1500, [=]() {
+    QTimer::singleShot(1000, [=]() {
         ui->green_light->setStyleSheet("background-color: white; border: 3px solid green;");
     });
 }
@@ -256,9 +255,6 @@ void MainWindow::startSession()
     ui->end_session->show();
     ui->pause_session->show();
     ui->resume_session->hide();
-    ui->band_label->show();
-    ui->ending_label->show();
-    ui->starting_label->show();
     ui->session_progress->show();
     ui->session_timer->show();
 
@@ -266,8 +262,8 @@ void MainWindow::startSession()
         timer->stop();
     }
 
-    ui->session_timer->setText("0:30");
-    sessionTimer = 30;
+    ui->session_timer->setText("0:29");
+    sessionTimer = 29;
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this](){ tickTime(); });
     timer->start(CLOCK_TICK);
@@ -286,7 +282,7 @@ void MainWindow::tickTime()
     QString formattedTimer = QString("0:%1").arg(sessionTimer, 2, 10, QLatin1Char('0'));
     ui->session_timer->setText(formattedTimer);
 
-    int progress = (30 - sessionTimer) * 100 / 30;  // Assuming sessionTimer starts at 30
+    int progress = (29 - sessionTimer) * 100 / 29;  // Assuming sessionTimer starts at 29
     ui->session_progress->setValue(progress);
 }
 
@@ -302,9 +298,6 @@ void MainWindow::endSession()
     ui->end_session->hide();
     ui->pause_session->hide();
     ui->resume_session->hide();
-    ui->band_label->hide();
-    ui->ending_label->hide();
-    ui->starting_label->hide();
     ui->session_progress->hide();
     ui->session_timer->hide();
 }

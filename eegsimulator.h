@@ -24,6 +24,9 @@ public:
     bool getInContact() const;
     bool getInSession() const; // note: do NOT make a setter for inSession (this will mess up the sequence). use `startSession()` and `endSession()` instead.
 
+signals:
+    void administerFeedback();
+
 private:
     Electrode* electrodes[NUM_ELECTRODES];
 

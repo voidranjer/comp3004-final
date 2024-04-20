@@ -7,7 +7,7 @@
 #include <QThread>
 #include <qcustomplot.h>
 #include "pcwindow.h"
-#include <eegsimulator.h>
+#include "eegsimulator.h"
 #include "neuresetcontroller.h"
 
 class NeuresetController;
