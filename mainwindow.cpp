@@ -195,7 +195,7 @@ void MainWindow::breakContact() {
         ui->blue_light->setStyleSheet("background-color: blue;");
         ui->break_contact->setText("Break Contact");
         ui->start_session->setEnabled(true);
-        if (timer) {
+        if (timer != nullptr) {
             timer->start();
         }
     } else {
@@ -203,7 +203,7 @@ void MainWindow::breakContact() {
         ui->break_contact->setText("Make Contact");
         ui->start_session->setEnabled(false);
 
-        if (timer) {
+        if (timer != nullptr) {
             timer->stop();
         }
 

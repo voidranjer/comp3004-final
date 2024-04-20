@@ -51,8 +51,8 @@ private:
     EEGSimulator *eegSimulator;
     NeuresetController *controller;
     int sessionTimer;
-    QTimer *timer;
-    QTimer *contactTimer;
+    QTimer *timer = nullptr;
+    QTimer *contactTimer = nullptr;
     int contactCount;
     void countInactivity();
     QTimer *pauseTimer;

@@ -47,7 +47,7 @@ private:
     void setupEEGPlot();
     void updateEEGPlot();
     void beginFeedback();
-    void endFeedback(); // automatically called by beginFeedback
+    void endFeedback(int therapyRound); // automatically called by beginFeedback
     double generateEEGData(double currentTime, Electrode *electrode, double offset, double amplitudeFactor = 1);
 
     bool waiting;

@@ -126,12 +126,17 @@ void EEGSimulator::beginFeedback()
     // possible fix: pass in `therapyRound` as an argument (pass-by-value) to the lambda function (try not to use implicit `this->therapyRound`)
     // possible problem: incomplete lambdaFunction context capture
 
-    connect(feedbackTimer, &QTimer::timeout, this, &EEGSimulator::endFeedback);
-    feedbackTimer->start(FEEDBACK_DURATION);
+    feedbackTimer->singleShot(FEEDBACK_DURATION, this, [this](){
+        endFeedback(therapyRound);
+    });
+
+    therapyRound++;
 }
 
-void EEGSimulator::endFeedback()
+void EEGSimulator::endFeedback(int therapyRound)
 {
+    isFeedback = false;
+
     if (therapyRound >= NUM_ROUNDS - 1) {
         // TODO HERE: Make final round measurements
 
@@ -161,10 +166,7 @@ void EEGSimulator::endFeedback()
         qDebug() << "Administered hertz to Electrode" << i+1 << "with the frequency" << feedbackFrequency;
     }
 
-    therapyRound++;
     qDebug() << "Finished feedback. Resuming measurements...";
-    isFeedback = false;
-    feedbackTimer->stop();
     observationTimer->start(OBSERVE_DURATION);
 }
 
