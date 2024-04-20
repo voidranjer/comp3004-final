@@ -78,10 +78,10 @@ void MainWindow::init()
 
 void MainWindow::countInactivity()
 {
-    ++contactCount;
-    if (contactCount >= INACTIVITY_TIME) {
+    ++pauseCount;
+    if (pauseCount >= INACTIVITY_TIME) {
         qDebug() << "Due to inactivity, the session has been stopped.";
-        contactTimer->stop();
+        pauseTimer->stop();
         endSession();
     }
 }
@@ -195,11 +195,18 @@ void MainWindow::breakContact() {
         ui->blue_light->setStyleSheet("background-color: blue;");
         ui->break_contact->setText("Break Contact");
         ui->start_session->setEnabled(true);
+        if (timer) {
+            timer->start();
+        }
     } else {
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
         ui->break_contact->setText("Make Contact");
         ui->start_session->setEnabled(false);
-        timer->stop();
+
+        if (timer) {
+            timer->stop();
+        }
+
         if (inSession) {
             contactCount = 0;
             contactTimer = new QTimer(this);
@@ -308,10 +315,10 @@ void MainWindow::pauseSession()
     ui->resume_session->show();
     timer->stop();
 
-    contactCount = 0;
-    contactTimer = new QTimer(this);
-    connect(contactTimer, &QTimer::timeout, this, [this](){ countInactivity(); });
-    contactTimer->start(CLOCK_TICK);
+    pauseCount = 0;
+    pauseTimer = new QTimer(this);
+    connect(pauseTimer, &QTimer::timeout, this, [this](){ countInactivity(); });
+    pauseTimer->start(CLOCK_TICK);
 }
 
 void MainWindow::resumeSession()
@@ -319,5 +326,5 @@ void MainWindow::resumeSession()
     ui->pause_session->show();
     ui->resume_session->hide();
     timer->start();
-    contactTimer->stop();
+    pauseTimer->stop();
 }

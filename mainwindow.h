@@ -55,5 +55,7 @@ private:
     QTimer *contactTimer;
     int contactCount;
     void countInactivity();
+    QTimer *pauseTimer;
+    int pauseCount;
 };
 #endif // MAINWINDOW_H
