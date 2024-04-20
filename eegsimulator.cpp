@@ -36,7 +36,7 @@ EEGSimulator::EEGSimulator(QObject *parent, QCustomPlot *plotWidget)
     // Init timers
     observationTimer = new QTimer(this);
     feedbackTimer = new QTimer(this);
-    connect(observationTimer, &QTimer::timeout, this, &EEGSimulator::beginFeedback);
+    // connect(observationTimer, &QTimer::timeout, this, &EEGSimulator::beginFeedback);
 
     waiting = false;
 }
@@ -112,45 +112,40 @@ void EEGSimulator::beginFeedback()
 {
     isFeedback = true;
 
-    qDebug() << "Finished measuring, calculating baseline...";
-
     // this does nothing for now.
-    calculateBaseline();
+    // calculateBaseline();
 
     // clear previous feedback graph (to prevent jumps in the line)
     m_customPlot->graph(NUM_ELECTRODES)->data()->clear();
 
-    qDebug() << "Administering feedback... ( ROUND: " << therapyRound + 1 << ")";
+    therapyRound++;
 
-    // FUNKY MULTITHREADING OUT-OF-ORDER EXECUTION ISSUE
-    // possible fix: pass in `therapyRound` as an argument (pass-by-value) to the lambda function (try not to use implicit `this->therapyRound`)
-    // possible problem: incomplete lambdaFunction context capture
+    if (therapyRound < NUM_ROUNDS) {
+        qDebug() << "Administering feedback... ( ROUND: " << therapyRound << ")";
+        qDebug() << "=============ROUND " << therapyRound << "– SENDING FEEDBACK (for" << FEEDBACK_DURATION << "ms)=============";
+    }
 
     feedbackTimer->singleShot(FEEDBACK_DURATION, this, [this](){
         endFeedback(therapyRound);
     });
-
-    therapyRound++;
 }
 
 void EEGSimulator::endFeedback(int therapyRound)
 {
+    QVector<double> OFFSETS = {5, 10, 15, 20};
+
     isFeedback = false;
 
-    if (therapyRound >= NUM_ROUNDS - 1) {
-        // TODO HERE: Make final round measurements
-
-        qDebug() << "Finished therapy session. Stopping measurements...";
-        endSession();
+    if (therapyRound == NUM_ROUNDS) {
+        qDebug() << "FINAL MEASUREMENTS COMPLETE. COMPUTING FINAL BASELINE...";
+        observationTimer->singleShot(OBSERVE_DURATION, this, [](){ qDebug() << "TODO: HANDLE FINAL MEASUREMENTS HERE"; });
         return;
     }
-
-    QVector<double> OFFSETS = {5, 10, 15, 20};
 
     for (int i = 0; i < NUM_ELECTRODES; ++i) {
         Electrode *electrode = electrodes[i];
 
-        double feedbackFrequency = (m_baselineFrequencies[i] / 16.0) + OFFSETS[therapyRound];
+        double feedbackFrequency = (m_baselineFrequencies[i] / 16.0) + OFFSETS[therapyRound - 1];
 
         // Permanently add feedback frequency to electrode
         electrode->addOffset(feedbackFrequency);
@@ -166,8 +161,10 @@ void EEGSimulator::endFeedback(int therapyRound)
         qDebug() << "Administered hertz to Electrode" << i+1 << "with the frequency" << feedbackFrequency;
     }
 
-    qDebug() << "Finished feedback. Resuming measurements...";
-    observationTimer->start(OBSERVE_DURATION);
+
+    // observationTimer->start(OBSERVE_DURATION);
+    qDebug() << "=============ROUND " << therapyRound + 1 << "– BEGIN MEASUREMENT (for" << OBSERVE_DURATION << "ms)=============";
+    observationTimer->singleShot(OBSERVE_DURATION, this, &EEGSimulator::beginFeedback);
 }
 
 void EEGSimulator::selectElectrode(int electrodeIndex) {
@@ -194,7 +191,6 @@ double EEGSimulator::generateEEGData(double currentTime, Electrode *electrode, d
 
 
 void EEGSimulator::calculateBaseline() {
-    qDebug() << "Measuring baseline...";
     QTimer::singleShot(1000, this, [=]() {
         for (int i = 0; i < NUM_ELECTRODES; ++i) {
             double dominantFrequency = electrodes[i]->getDominantFrequency();
@@ -204,10 +200,12 @@ void EEGSimulator::calculateBaseline() {
 }
 
 void EEGSimulator::startSession() {
-    observationTimer->start(OBSERVE_DURATION);
     therapyRound = 0; // reset rounds
     inSession = true;
-    qDebug() << "Starting therapy session...";
+    qDebug() << "Starting new therapy session...";
+
+    qDebug() << "=============ROUND 1 – BEGIN MEASUREMENT (for " << OBSERVE_DURATION << "ms)=============";
+    observationTimer->singleShot(OBSERVE_DURATION, this, &EEGSimulator::beginFeedback);
 }
 
 void EEGSimulator::endSession() {
