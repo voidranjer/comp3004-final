@@ -28,6 +28,7 @@ public:
     QList<QWidget *> static createBattery();
     bool getInSession();
     bool getIsOn();
+    void tickTime();
 
 public slots:
     void powerButtonClicked();
@@ -50,5 +51,7 @@ private:
     PCWindow *pcWindow;
     EEGSimulator *eegSimulator;
     NeuresetController *controller;
+    int sessionTimer;
+    QTimer *timer;
 };
 #endif // MAINWINDOW_H

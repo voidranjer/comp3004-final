@@ -215,6 +215,7 @@ void MainWindow::changeRedLight() {
 
 void MainWindow::startSession()
 {
+    ui->session_progress->setValue(0);
     if (controller->getOutOfBattery()) {
         powerButtonClicked();
         return;
@@ -237,6 +238,32 @@ void MainWindow::startSession()
     ui->session_progress->show();
     ui->session_timer->show();
 
+    if (timer) {
+        timer->stop();
+    }
+
+    ui->session_timer->setText("0:30");
+    sessionTimer = 30;
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [this](){ tickTime(); });
+    timer->start(CLOCK_TICK);
+}
+
+void MainWindow::tickTime()
+{
+    if (sessionTimer == 0) {
+        timer->stop();
+        endSession();
+        return;
+    }
+
+    --sessionTimer;
+
+    QString formattedTimer = QString("0:%1").arg(sessionTimer, 2, 10, QLatin1Char('0'));
+    ui->session_timer->setText(formattedTimer);
+
+    int progress = (30 - sessionTimer) * 100 / 30;  // Assuming sessionTimer starts at 30
+    ui->session_progress->setValue(progress);
 }
 
 void MainWindow::endSession()
@@ -262,10 +289,12 @@ void MainWindow::pauseSession()
 {
     ui->pause_session->hide();
     ui->resume_session->show();
+    timer->stop();
 }
 
 void MainWindow::resumeSession()
 {
     ui->pause_session->show();
     ui->resume_session->hide();
+    timer->start();
 }
