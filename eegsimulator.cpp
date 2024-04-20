@@ -124,7 +124,12 @@ void EEGSimulator::beginFeedback()
     therapyRound++;
 
     if (therapyRound < NUM_ROUNDS) {
-        qDebug() << "Calculating baseline... BASELINE CALCULATED:" << calculateBaseline();
+        double baseline = calculateBaseline();
+        qDebug() << "Calculating baseline... BASELINE CALCULATED:" << baseline;
+
+        if (therapyRound == 1) {
+            startingBaseline = baseline;
+        }
 
         qDebug() << "Administering feedback... ( ROUND: " << therapyRound << ")";
         qDebug() << "=============ROUND " << therapyRound << "– SENDING FEEDBACK (for" << FEEDBACK_DURATION << "ms)=============";
@@ -140,9 +145,10 @@ void EEGSimulator::endFeedback()
     isFeedback = false;
 
     if (therapyRound == NUM_ROUNDS) {
-        qDebug() << "FINAL MEASUREMENTS COMPLETE. COMPUTING FINAL BASELINE... FINAL BASELINE:" << calculateBaseline();
+        double endingBaseline = calculateBaseline();
         QTimer timer;
-        timer.singleShot(OBSERVE_DURATION, this, [](){ qDebug() << "TODO: HANDLE FINAL MEASUREMENTS HERE"; });
+        timer.singleShot(OBSERVE_DURATION, this, [=](){ emit sessionCompleted(startingBaseline, endingBaseline); });
+        qDebug() << "FINAL MEASUREMENTS COMPLETE. COMPUTING FINAL BASELINE... FINAL BASELINE:" << endingBaseline;
         return;
     }
 
