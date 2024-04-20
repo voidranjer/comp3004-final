@@ -77,8 +77,9 @@ void MainWindow::init()
     ui->comboBox->addItem("Electrode 7");
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::handleElectrodeSelection);
 
-    // LOGGER: Event handler
+    // LOGGER: Event handlers
     connect(eegSimulator, &EEGSimulator::sessionCompleted, controller, &NeuresetController::handleSessionCompleted);
+    connect(controller, &NeuresetController::logEntryAdded, this, &MainWindow::addLogEntry);
 }
 
 void MainWindow::countInactivity()
@@ -335,4 +336,9 @@ void MainWindow::resumeSession()
     timer->start();
     eegSimulator->continueTreatment();
     pauseTimer->stop();
+}
+
+void MainWindow::addLogEntry(QString entry)
+{
+    ui->logList->addItem(entry);
 }

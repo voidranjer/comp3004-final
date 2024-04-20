@@ -57,6 +57,7 @@ void NeuresetController::handleSessionCompleted(double startingBaseline, double 
 {
     QDateTime timestamp = QDateTime::currentDateTime();
     qDebug() << "Controller:" << timestamp.toString("yyyy-MM-dd hh:mm:ss") << "Adding session to log...";
+    emit logEntryAdded(sessionLogger->addEntry(timestamp, startingBaseline, endingBaseline));
 }
 
 bool NeuresetController::getInSession() {

@@ -10,10 +10,10 @@ class SessionLogger : public QObject
     Q_OBJECT
 public:
     explicit SessionLogger(QObject *parent = nullptr);
-    void addLogEntry(LogEntry *entry);
+public slots:
+    QString addEntry(QDateTime timestamp, double startingBaseline, double endingBaseline);
 private:
     QVector<LogEntry*> logEntries;
-signals:
 };
 
 #endif // SESSIONLOGGER_H

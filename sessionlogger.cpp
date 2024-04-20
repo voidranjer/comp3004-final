@@ -4,7 +4,10 @@ SessionLogger::SessionLogger(QObject *parent)
     : QObject{parent}
 {}
 
-void SessionLogger::addLogEntry(LogEntry *entry)
+QString SessionLogger::addEntry(QDateTime timestamp, double startingBaseline, double endingBaseline)
 {
-    logEntries.append(entry);
+    LogEntry* logEntry = new LogEntry(this, timestamp, startingBaseline, endingBaseline);
+    logEntries.append(logEntry);
+    QString logText = "Session: " + timestamp.toString("yyyy-MM-dd hh:mm:ss");
+    return logText;
 }

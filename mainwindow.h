@@ -38,6 +38,7 @@ public slots:
     void handleElectrodeSelection(int index);
     void pauseSession();
     void resumeSession();
+    void addLogEntry(QString entry);
 
 private:
     Ui::MainWindow *ui;

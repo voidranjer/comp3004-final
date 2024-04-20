@@ -146,9 +146,8 @@ void EEGSimulator::endFeedback()
 
     if (therapyRound == NUM_ROUNDS) {
         double endingBaseline = calculateBaseline();
-        QTimer timer;
-        timer.singleShot(OBSERVE_DURATION, this, [=](){ emit sessionCompleted(startingBaseline, endingBaseline); });
         qDebug() << "FINAL MEASUREMENTS COMPLETE. COMPUTING FINAL BASELINE... FINAL BASELINE:" << endingBaseline;
+        emit sessionCompleted(startingBaseline, endingBaseline);
         return;
     }
 

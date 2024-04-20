@@ -39,6 +39,7 @@ private:
 signals:
     void timeChanged(QDateTime datetime); // emitted every second
     void clockSettingActiveChanged(bool active);
+    void logEntryAdded(QString logString);
 
 public slots:
     void setDatetime(QDateTime datetime); // to set the device datetime
