@@ -44,7 +44,6 @@ private:
     QCustomPlot *customPlot;
     bool isOn = true; // will go to false when program is setting up
     void changeRedLight();
-    void loopChangeRedLight();
     void changeMachineState();
     void giveTreatment();
     void init();
@@ -53,5 +52,8 @@ private:
     NeuresetController *controller;
     int sessionTimer;
     QTimer *timer;
+    QTimer *contactTimer;
+    int contactCount;
+    void countInactivity();
 };
 #endif // MAINWINDOW_H

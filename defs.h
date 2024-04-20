@@ -18,4 +18,6 @@
 
 #define BATTERY_LIFE        180 // Number of seconds battery will last (x2 times used while in session)
 
+#define INACTIVITY_TIME     15  // Number of seconds of inactivity in session before the session ends itself
+
 #endif // DEFS_H

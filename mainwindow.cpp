@@ -76,6 +76,15 @@ void MainWindow::init()
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::handleElectrodeSelection);
 }
 
+void MainWindow::countInactivity()
+{
+    ++contactCount;
+    if (contactCount >= INACTIVITY_TIME) {
+        qDebug() << "Due to inactivity, the session has been stopped.";
+        contactTimer->stop();
+        endSession();
+    }
+}
 
 MainWindow::~MainWindow()
 {
@@ -190,25 +199,33 @@ void MainWindow::breakContact() {
         ui->blue_light->setStyleSheet("background-color: white; border: 3px solid blue;");
         ui->break_contact->setText("Make Contact");
         ui->start_session->setEnabled(false);
+        timer->stop();
         if (inSession) {
-            loopChangeRedLight();
+            contactCount = 0;
+            contactTimer = new QTimer(this);
+            connect(contactTimer, &QTimer::timeout, this, [this](){ changeRedLight(); });
+            contactTimer->start(CLOCK_TICK);
         }
     }
 }
 
-void MainWindow::loopChangeRedLight() {
+void MainWindow::changeRedLight() {
     if (!eegSimulator->getInSession() || eegSimulator->getInContact() || !isOn) {
+        contactTimer->stop();
         return;
     }
-    changeRedLight();
 
-    QTimer::singleShot(2000, this, &MainWindow::loopChangeRedLight);
-}
+    ++contactCount;
 
-void MainWindow::changeRedLight() {
+    if (contactCount >= INACTIVITY_TIME) {
+        qDebug() << "Due to inactivity, the session has been stopped.";
+        contactTimer->stop();
+        endSession();
+    }
+
     ui->red_light->setStyleSheet("background-color: red;");
 
-    QTimer::singleShot(1000, [=]() {
+    QTimer::singleShot(500, [=]() {
         ui->red_light->setStyleSheet("background-color: white; border: 3px solid red;");
     });
 }
@@ -290,6 +307,11 @@ void MainWindow::pauseSession()
     ui->pause_session->hide();
     ui->resume_session->show();
     timer->stop();
+
+    contactCount = 0;
+    contactTimer = new QTimer(this);
+    connect(contactTimer, &QTimer::timeout, this, [this](){ countInactivity(); });
+    contactTimer->start(CLOCK_TICK);
 }
 
 void MainWindow::resumeSession()
@@ -297,4 +319,5 @@ void MainWindow::resumeSession()
     ui->pause_session->show();
     ui->resume_session->hide();
     timer->start();
+    contactTimer->stop();
 }
