@@ -11,3 +11,8 @@ QString SessionLogger::addEntry(QDateTime timestamp, double startingBaseline, do
     QString logText = "Session: " + timestamp.toString("yyyy-MM-dd hh:mm:ss");
     return logText;
 }
+
+QVector<LogEntry *> SessionLogger::getLogEntries() const
+{
+    return logEntries;
+}

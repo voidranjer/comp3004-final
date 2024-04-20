@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/bg">
+        <file>retro.jpg</file>
+    </qresource>
+</RCC>

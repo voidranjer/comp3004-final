@@ -23,6 +23,8 @@ public:
     bool getInSession();
     bool getIsOn();
 
+    SessionLogger *getSessionLogger() const;
+
 private:
     /*
      * Device Datetime

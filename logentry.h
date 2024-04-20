@@ -9,6 +9,7 @@ class LogEntry : public QObject
     Q_OBJECT
 public:
     explicit LogEntry(QObject *parent, QDateTime timestamp, double startingBaseline, double endingBaseline);
+    QString getLogText();
 private:
     QDateTime timestamp;
     double startingBaseline;

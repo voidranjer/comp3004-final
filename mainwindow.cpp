@@ -10,10 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Show pc window
-    pcWindow = new PCWindow(this);
-    pcWindow->show();
-
     // initialize all components
     init();
 }
@@ -30,6 +26,8 @@ void MainWindow::init()
 
     controller = new NeuresetController(this, elements, this);
     eegSimulator = new EEGSimulator(this, ui->customPlot);
+    pcWindow = new PCWindow(this, controller->getSessionLogger());
+    pcWindow->show();
 
     // connect buttons
     connect(ui->powerButton, SIGNAL(released()), this, SLOT (powerButtonClicked()));

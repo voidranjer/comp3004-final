@@ -39,6 +39,11 @@ void NeuresetController::tickTime()
     emit timeChanged(currDatetime);
 }
 
+SessionLogger *NeuresetController::getSessionLogger() const
+{
+    return sessionLogger;
+}
+
 void NeuresetController::setDatetime(QDateTime datetime)
 {
     timeOfSetting = QDateTime::currentDateTime();
@@ -55,7 +60,7 @@ void NeuresetController::toggleClockSetting()
 
 void NeuresetController::handleSessionCompleted(double startingBaseline, double endingBaseline)
 {
-    QDateTime timestamp = QDateTime::currentDateTime();
+    QDateTime timestamp = getDatetime();
     qDebug() << "Controller:" << timestamp.toString("yyyy-MM-dd hh:mm:ss") << "Adding session to log...";
     emit logEntryAdded(sessionLogger->addEntry(timestamp, startingBaseline, endingBaseline));
 }
