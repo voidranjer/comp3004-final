@@ -124,8 +124,21 @@ void Battery::tickTime()
 
     if (batteryPercentage <= batteryAnnouncement && !outOfBattery) {
         reduceBattery();
-        qDebug() << "Battery life now at" << batteryAnnouncement << "%";
+        if (batteryAnnouncement == 20){
+            qDebug() << "Battery life now at" << batteryAnnouncement << "%";
+            qDebug() << "Battery life LOW please plug in device";
+        }
+        else if (batteryAnnouncement == 10){
+            qDebug() << "Battery life now at" << batteryAnnouncement << "%";
+            qDebug() << "Battery life CRITICALLY LOW low please plug in device";
+        }
+        else{
+            qDebug() << "Battery life now at" << batteryAnnouncement << "%";
+        }
         batteryAnnouncement -= 10;
+
     }
+
+
 }
 

@@ -47,7 +47,8 @@ background-size: contain;</string>
      </property>
      <property name="font">
       <font>
-       <pointsize>16</pointsize>
+       <family>DejaVu Sans</family>
+       <pointsize>12</pointsize>
       </font>
      </property>
      <property name="styleSheet">
@@ -75,7 +76,7 @@ background-size: contain;</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
