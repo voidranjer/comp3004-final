@@ -6,6 +6,7 @@
 #include "battery.h"
 #include <QLabel>
 #include "mainwindow.h"
+#include "sessionlogger.h"
 
 class Battery;
 
@@ -33,6 +34,7 @@ private:
     bool clockSettingActive = false;
     Battery* battery;
     MainWindow* main;
+    SessionLogger* sessionLogger;
 
 signals:
     void timeChanged(QDateTime datetime); // emitted every second
@@ -41,6 +43,7 @@ signals:
 public slots:
     void setDatetime(QDateTime datetime); // to set the device datetime
     void toggleClockSetting();
+    void handleSessionCompleted(double startingBaseline, double endingBaseline);
 };
 
 #endif // NEURESETCONTROLLER_H

@@ -12,6 +12,7 @@ NeuresetController::NeuresetController(QObject *parent, QList<QLabel *> elements
     timer->start(CLOCK_TICK);
 
     battery = new Battery(this, elements, this);
+    sessionLogger = new SessionLogger(this);
 }
 
 QDateTime NeuresetController::getDatetime()
@@ -50,6 +51,12 @@ void NeuresetController::toggleClockSetting()
 {
     clockSettingActive = !clockSettingActive;
     emit clockSettingActiveChanged(clockSettingActive);
+}
+
+void NeuresetController::handleSessionCompleted(double startingBaseline, double endingBaseline)
+{
+    QDateTime timestamp = QDateTime::currentDateTime();
+    qDebug() << "Controller:" << timestamp.toString("yyyy-MM-dd hh:mm:ss") << "Adding session to log...";
 }
 
 bool NeuresetController::getInSession() {

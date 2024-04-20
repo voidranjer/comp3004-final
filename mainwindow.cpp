@@ -76,6 +76,9 @@ void MainWindow::init()
     ui->comboBox->addItem("Electrode 6");
     ui->comboBox->addItem("Electrode 7");
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::handleElectrodeSelection);
+
+    // LOGGER: Event handler
+    connect(eegSimulator, &EEGSimulator::sessionCompleted, controller, &NeuresetController::handleSessionCompleted);
 }
 
 void MainWindow::countInactivity()
