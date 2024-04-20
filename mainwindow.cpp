@@ -36,6 +36,8 @@ void MainWindow::init()
     connect(ui->break_contact, SIGNAL(released()), this, SLOT (breakContact()));
     connect(ui->start_session, SIGNAL(released()), this, SLOT (startSession()));
     connect(ui->end_session, SIGNAL(released()), this, SLOT (endSession()));
+    connect(ui->pause_session, SIGNAL(released()), this, SLOT (pauseSession()));
+    connect(ui->resume_session, SIGNAL(released()), this, SLOT (resumeSession()));
 
     // to hide the objects that shouldn't be visible when the device is powered off
     changeMachineState();
@@ -72,9 +74,6 @@ void MainWindow::init()
     ui->comboBox->addItem("Electrode 6");
     ui->comboBox->addItem("Electrode 7");
     connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::handleElectrodeSelection);
-
-    // CLOCK: Tick the clock
-    connect(controller, &NeuresetController::timeChanged, ui->datetimeDisplay, [this](QDateTime datetime){ ui->datetimeDisplay->setText(datetime.toString("yyyy-MM-dd hh:mm:ss"));});
 }
 
 
@@ -99,7 +98,7 @@ void MainWindow::changeMachineState()
                                   ui->neuresetBox,   ui->battery1_2,
                                   ui->battery1_3,    ui->battery2_2,
                                   ui->battery2_3,    ui->battery3_2,
-                                  ui->battery3_3
+                                  ui->battery3_3,    ui->datetimeDisplay
      };
 
      for (QWidget* element : elements) {
@@ -115,6 +114,13 @@ void MainWindow::changeMachineState()
     }
 
     ui->end_session->hide();
+    ui->pause_session->hide();
+    ui->resume_session->hide();
+    ui->band_label->hide();
+    ui->ending_label->hide();
+    ui->starting_label->hide();
+    ui->session_progress->hide();
+    ui->session_timer->hide();
 
     if (!isOn) {
         ui->start_session->setEnabled(false);
@@ -212,6 +218,14 @@ void MainWindow::startSession()
 
     ui->start_session->hide();
     ui->end_session->show();
+    ui->pause_session->show();
+    ui->resume_session->hide();
+    ui->band_label->show();
+    ui->ending_label->show();
+    ui->starting_label->show();
+    ui->session_progress->show();
+    ui->session_timer->show();
+
 }
 
 void MainWindow::endSession()
@@ -224,5 +238,23 @@ void MainWindow::endSession()
     ui->start_session->show();
 
     ui->end_session->hide();
+    ui->pause_session->hide();
+    ui->resume_session->hide();
+    ui->band_label->hide();
+    ui->ending_label->hide();
+    ui->starting_label->hide();
+    ui->session_progress->hide();
+    ui->session_timer->hide();
 }
 
+void MainWindow::pauseSession()
+{
+    ui->pause_session->hide();
+    ui->resume_session->show();
+}
+
+void MainWindow::resumeSession()
+{
+    ui->pause_session->show();
+    ui->resume_session->hide();
+}

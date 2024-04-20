@@ -31,6 +31,8 @@ public slots:
     void startSession();
     void endSession();
     void handleElectrodeSelection(int index);
+    void pauseSession();
+    void resumeSession();
 
 private:
     Ui::MainWindow *ui;

@@ -113,8 +113,6 @@ void Battery::tickTime()
     //    TODO: if in session x2
     //    TODO: don't decrease if power off
     --batteryLife;
-    --batteryLife;
-    --batteryLife;
 
     int batteryPercentage = (batteryLife * 100) / BATTERY_LIFE;
 
