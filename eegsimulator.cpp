@@ -112,6 +112,8 @@ void EEGSimulator::beginFeedback()
 {
     isFeedback = true;
 
+    emit administerFeedback();
+
     // this does nothing for now.
     // calculateBaseline();
 
@@ -211,7 +213,6 @@ void EEGSimulator::startSession() {
 void EEGSimulator::endSession() {
     inSession = false;
     observationTimer->stop();
-    qDebug() << "Ending therapy session...";
 }
 
 bool EEGSimulator::toggleContact()
