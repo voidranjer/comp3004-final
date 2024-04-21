@@ -1,6 +1,10 @@
+## Link to Demonstration Video:
+
+Insert Video Link Here
+
 ## Organization of the submission.
 
-TODO: Add some description of submission.
+The submitted zip file has a documentation pdf including all the diagrams along with this ReadMe.md file. The code has been separated into its own directory but could also be cloned from this repo (No differences). Please take a look at the YouTube link above for our video demonstration.
 
 ## Team members: 
 James Yap [101276054], Lei Wu [101186940], Matthew (Jacob) Seto [101273562], Alvina (Kayeon) Han [101261651], Aekus Trehan [101262719]
@@ -10,12 +14,11 @@ James Yap [101276054], Lei Wu [101186940], Matthew (Jacob) Seto [101273562], Alv
 Lei Wu:
   - Diagrams
   - Documentation
-  - Add more specifics
+  - Video
 
 Alvina Han:
   - Diagrams
   - Documentation
-  - Add more specifics
 
 James Yap:
   - Implementation
@@ -25,5 +28,3 @@ Matthew Seto:
 
 Aekus Trehan:
   - Implementation
-
-TODO: Add more details on the specifics of each person's roles
