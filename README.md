@@ -6,6 +6,8 @@ https://www.youtube.com/watch?v=30_rAEBJhmk
 
 The submitted zip file has a documentation pdf including all the diagrams along with this ReadMe.md file. The code has been separated into its own directory but could also be cloned from this repo (No differences). Please take a look at the YouTube link above for our video demonstration.
 
+The diagrams and report are in the Diagrams+Report folder. Everything else is within the code.
+
 ## How to run the project:
 
 Prerequisites: 
