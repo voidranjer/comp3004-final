@@ -1,0 +1,33 @@
+title Safety scenario #2 – Door Obstacle Detection
+
+participant ECS
+participant "<link: https://google.com>elevator1: Elevator</link>" as elevator1
+participant "<link: https://google.com>sensor1: ElevatorFloorSensor</link>" as sensor1
+participant "<link: https://google.com>door1: ElevatorDoor</link>" as door1
+participant "<link: https://google.com>obstacle1: ElevatorDoorSensor</link>" as obstacle1
+participant "<link: https://google.com>audio1: ElevatorAudio</link>" as audio1
+participant "<link: https://google.com>display1: ElevatorDisplay</link>" as display1
+
+note over obstacle1: Scenario:\nAn obstacle is blocking the door.
+
+obstacle1->door1: doorBlocked()
+activate door1
+door1->elevator1: doorBlocked()
+deactivate door1
+
+activate elevator1
+elevator1->ECS: doorBlocked(elevatorNum = 1)
+activate ECS
+ECS-->elevator1: ret: suspend door seq.
+deactivate ECS
+
+elevator1->door1: open()
+activate door1
+deactivateafter door1
+
+elevator1->display1: obstacleWarning()
+activate display1
+deactivateafter display1
+elevator1->audio1: obstacleWarning()
+activate audio1
+deactivateafter audio1

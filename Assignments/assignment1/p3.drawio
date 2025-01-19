@@ -1,0 +1,68 @@
+<mxfile host="app.diagrams.net" modified="2024-01-21T16:43:20.193Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="p2-pWDS9pDN7RvUccH1e" version="22.1.21" type="device">
+  <diagram name="Page-1" id="UbYgZ_rj0a1KF4BhCJCZ">
+    <mxGraphModel dx="922" dy="628" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-18" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;endArrow=block;endFill=0;" edge="1" parent="1" source="2mQs0M9CFxyxIPbegkqz-1" target="2mQs0M9CFxyxIPbegkqz-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-1" value="Fire evacuation" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="450" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="2mQs0M9CFxyxIPbegkqz-2" target="2mQs0M9CFxyxIPbegkqz-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-13" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2mQs0M9CFxyxIPbegkqz-11">
+          <mxGeometry x="-0.0583" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-2" value="Get to a different floor via building elevator system" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="180" width="210" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-19" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=1;entryDx=0;entryDy=0;endArrow=block;endFill=0;" edge="1" parent="1" source="2mQs0M9CFxyxIPbegkqz-3" target="2mQs0M9CFxyxIPbegkqz-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-3" value="Power outage graceful shutdown" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="790" y="450" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="2mQs0M9CFxyxIPbegkqz-4" target="2mQs0M9CFxyxIPbegkqz-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-17" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2mQs0M9CFxyxIPbegkqz-16">
+          <mxGeometry x="-0.0432" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-4" value="With overload protection" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="350" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-5" value="Passenger emergency intercom" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="635" y="185" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-20" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="2mQs0M9CFxyxIPbegkqz-6" target="2mQs0M9CFxyxIPbegkqz-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-21" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="2mQs0M9CFxyxIPbegkqz-6" target="2mQs0M9CFxyxIPbegkqz-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-6" value="Passenger" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="510" y="280" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-22" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="2mQs0M9CFxyxIPbegkqz-9" target="2mQs0M9CFxyxIPbegkqz-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-23" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="2mQs0M9CFxyxIPbegkqz-9" target="2mQs0M9CFxyxIPbegkqz-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-9" value="Building safety services" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="260" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2mQs0M9CFxyxIPbegkqz-14" value="Recall all elevator cars to safe floor" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="340" width="230" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

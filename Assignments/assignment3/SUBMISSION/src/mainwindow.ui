@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1127</width>
+    <height>544</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="floorPanelContainer">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>181</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Floor Panel</string>
+    </property>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>140</width>
+       <height>106</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="floorPanelLayoutContainer">
+      <item>
+       <layout class="QFormLayout" name="floorSelectionContainer">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Floor</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="floorSelector">
+          <property name="editable">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="callButtonsContainer"/>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="elevatorPanelContainer">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>20</y>
+      <width>461</width>
+      <height>441</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Elevator Panel</string>
+    </property>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>70</y>
+       <width>171</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Intercom</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>127</width>
+        <height>66</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="intercomButton">
+         <property name="text">
+          <string>Help</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="intercomStatusDisplay">
+         <property name="text">
+          <string>Disconnected</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QLineEdit" name="fireStatusDisplay">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>30</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Operation Status: Init</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>190</y>
+       <width>171</width>
+       <height>171</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Door Controls</string>
+     </property>
+     <widget class="QLineEdit" name="doorStatusDisplay">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>151</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Initializing...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>151</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="openButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Open</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="closeButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Close</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QCheckBox" name="obstacleCheckbox">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>140</y>
+        <width>81</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Obstacle</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QCheckBox" name="overloadCheckbox">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>370</y>
+       <width>85</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Overload</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>158</width>
+       <height>391</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="elevatorPanelLayoutContainer">
+      <item>
+       <layout class="QFormLayout" name="elevatorSelectionContainer">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Elevator</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="elevatorSelector"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLCDNumber" name="floorNumberDisplay">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="digitCount">
+         <number>2</number>
+        </property>
+        <property name="segmentStyle">
+         <enum>QLCDNumber::Filled</enum>
+        </property>
+        <property name="value" stdset="0">
+         <double>1.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="destButtonsContainer"/>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>200</y>
+      <width>181</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Building Controls</string>
+    </property>
+    <widget class="QWidget" name="verticalLayoutWidget_4">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>131</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QCheckBox" name="powerCheckbox">
+        <property name="text">
+         <string>Power Outage</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="fireCheckbox">
+        <property name="text">
+         <string>Fire Alarm</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="verticalLayoutWidget_5">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>131</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QLineEdit" name="intercomRecvStatusDisplay">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>No connection</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="intercomDisconnectButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Disconnect</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="resetButton">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>420</y>
+      <width>141</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset Simulation</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>20</y>
+      <width>351</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="sliderContainer"/>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1127</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuElevatorSim">
+    <property name="title">
+     <string>ElevatorSim</string>
+    </property>
+   </widget>
+   <addaction name="menuElevatorSim"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

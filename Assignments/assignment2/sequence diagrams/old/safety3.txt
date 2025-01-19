@@ -1,0 +1,50 @@
+title Safety scenario #3 – Fire
+
+participant Building
+participant "<link: https://google.com>floorButtons: FloorButton</link>" as floorButtons
+participant "<link: https://google.com>floor1: Floor</link>" as floor1
+participant "<link: https://google.com>otherFloors: Floor</link>" as otherFloors
+participant ECS
+participant "<link: https://google.com>elevators: Elevator</link>" as elevators
+participant "<link: https://google.com>floorSensors: ElevatorFloorSensor</link>" as floorSensors
+participant "<link: https://google.com>doors: ElevatorDoor</link>" as doors
+participant "<link: https://google.com>audios: ElevatorAudio</link>" as audios
+participant "<link: https://google.com>displays: ElevatorDisplay</link>" as displays
+
+note over Building: Scenario:\n1) Fire alarm sounded in the building.\n2) Fire alarm triggered from elevator.
+
+Building->ECS: fire alarm triggered
+activate ECS
+ECS->otherFloors: suspendServices()
+activate otherFloors
+otherFloors->floorButtons: lightsOff()
+activate floorButtons
+deactivateafter floorButtons
+otherFloors->floorButtons: disableRequests()
+activate floorButtons
+deactivateafter floorButtons
+deactivate otherFloors
+
+
+ECS->elevators: recallTo(floor = 1)
+
+activate elevators
+elevators->displays: fireWarning()
+activate displays
+deactivateafter displays
+elevators->audios: fireWarning()
+activate audios
+deactivateafter audios
+deactivate elevators
+
+
+floor1->floorSensors: detectMe(floorNum = 1)
+activate floorSensors
+floorSensors->elevators: updateCurrentFloor(floorNum = 1)
+deactivate floorSensors
+activate elevators
+elevators->ECS: reportNewFloor(elevatorNum = x, floorNum = 1)
+deactivate ECS
+elevators->doors: open()
+activate doors
+deactivateafter doors

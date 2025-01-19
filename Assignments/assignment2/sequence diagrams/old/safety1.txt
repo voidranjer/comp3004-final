@@ -1,0 +1,48 @@
+title Safety scenario #1 – Emerg. Help Intercom
+
+participant Passenger
+participant 911
+participant SafetyServices
+participant "<link: https://google.com>floor2: Floor</link>" as floor2
+participant ECS
+participant "<link: https://google.com>elevator1: Elevator</link>" as elevator1
+participant "<link: https://google.com>sensor1: ElevatorFloorSensor</link>" as sensor1
+participant "<link: https://google.com>door1: ElevatorDoor</link>" as door1
+participant "<link: https://google.com>bell1: ElevatorBell</link>" as bell1
+participant "<link: https://google.com>intercom1: ElevatorIntercom</link>" as intercom1
+participant "<link: https://google.com>helpButton2: ElevatorHelpButton</link>" as helpButton2
+
+note over Passenger: Scenario:\nElevator #1 in service.\nPassenger is in the elevator cab.\nPassenger wishes to call intercom.
+
+
+Passenger->helpButton2: press
+
+activate helpButton2
+helpButton2->elevator1: help()
+deactivate helpButton2
+
+activate elevator1
+elevator1->ECS: help(elevatorNum = 1)
+deactivate elevator1
+
+activate ECS
+ECS->SafetyServices: help(wing = "A", elevatorNum = 1)
+SafetyServices-->ECS: ret: connection established
+ECS-->elevator1: ret: connection req.\nacknowledged
+
+activate elevator1
+elevator1->intercom1: blinkIndicator()
+activate intercom1
+deactivateafter intercom1
+
+SafetyServices->ECS: openChannel(elevatorNum = 1)
+ECS->elevator1: openChannel()
+elevator1->intercom1: establishVoiceConnection()
+activate intercom1
+deactivateafter intercom1
+deactivate elevator1
+
+SafetyServices-->ECS: ret: connection timeout
+ECS->ECS: checkConnection()
+ECS->911: dialEmergency(wing = "A", elevatorNum = 1)
+deactivate ECS

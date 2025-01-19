@@ -1,0 +1,67 @@
+title Success scenario #1 – Calling the Elevator
+
+participant Passenger
+participant "<link: https://google.com>floor1Button: FloorButton</link>" as floor1Button
+participant "<link: https://google.com>floor1: Floor</link>" as floor1
+participant "<link: https://google.com>floor2: Floor</link>" as floor2
+participant ECS
+participant "<link: https://google.com>elevator1: Elevator</link>" as elevator1
+participant "<link: https://google.com>sensor1: ElevatorFloorSensor</link>" as sensor1
+participant "<link: https://google.com>door1: ElevatorDoor</link>" as door1
+participant "<link: https://google.com>bell1: ElevatorBell</link>" as bell1
+participant "<link: https://google.com>display1: ElevatorDisplay</link>" as display1
+
+note over Passenger: Scenario:\nPassenger is on Floor 1\nPassenger wishes to go to Floor 2.\nElevator #1 idling on Floor 2.
+
+Passenger->floor1Button: press (up arrow)
+activate floor1Button
+floor1Button->floor1Button: lightOn(direction = "up")
+
+floor1Button->floor1: inform(direction = "up")
+deactivate floor1Button
+
+floor1->ECS: floorRequest(floorNumber = 1, direction = "up")
+
+activate ECS
+ECS->ECS: selectElevator()
+ECS->elevator1: move(direction = "down")
+activate elevator1
+deactivateafter elevator1
+deactivate ECS
+
+note over floor2: Elevator 1 was idling on Floor 2 
+floor2->sensor1: detectMe(floorNumber = 1)
+
+activate sensor1
+sensor1->elevator1: updateCurrentFloor(floorNumber = 1)
+deactivate sensor1
+
+activate elevator1
+elevator1->display1: updateDisplay(floorNumber = 1)
+activate display1
+deactivateafter display1
+elevator1->ECS: reportNewFloor(fNum = 1, eNum = 1)
+deactivate elevator1
+
+activate ECS
+ECS->ECS: makeDecision()
+ECS->elevator1: stop()
+activate elevator1
+ECS->floor1: serviced(direction = "up")
+deactivate ECS
+
+activate floor1
+floor1->floor1Button: lightOff(direction = "up")
+activate floor1Button
+deactivateafter floor1Button
+deactivate floor1
+
+elevator1->door1: open()
+activate door1
+deactivateafter door1
+
+elevator1->bell1: ring()
+activate bell1
+deactivateafter bell1
+
+deactivate elevator1

@@ -1,0 +1,60 @@
+title Safety scenario #5 – Power Outage
+
+participant Building
+participant "<link: https://google.com>floorButtons: FloorButton</link>" as floorButtons
+participant "<link: https://google.com>floor1: Floor</link>" as floor1
+participant "<link: https://google.com>otherFloors: Floor</link>" as otherFloors
+participant ECS
+participant "<link: https://google.com>elevators: Elevator</link>" as elevators
+participant "<link: https://google.com>floorSensors: ElevatorFloorSensor</link>" as floorSensors
+participant "<link: https://google.com>doors: ElevatorDoor</link>" as doors
+participant "<link: https://google.com>audios: ElevatorAudio</link>" as audios
+participant "<link: https://google.com>displays: ElevatorDisplay</link>" as displays
+
+note over Building: Scenario:\n1) Power outage signal is received
+
+Building->ECS: power outage notification
+
+activate ECS
+ECS->otherFloors: suspendServices()
+activate otherFloors
+otherFloors->floorButtons: lightsOff()
+activate floorButtons
+deactivateafter floorButtons
+otherFloors->floorButtons: disableRequests()
+activate floorButtons
+deactivateafter floorButtons
+deactivate otherFloors
+
+
+ECS->elevators: evacuationProtocol()
+deactivate ECS
+activate elevators
+elevators->elevators: recallTo(floorNum = 1)
+deactivate elevators
+
+floor1->floorSensors: detectMe(floorNum = 1)
+activate floorSensors
+floorSensors->elevators: updateCurrentFloor(floorNum = 1)
+deactivate floorSensors
+activate elevators
+elevators->ECS: reportNewFloor(elevatorNum = x, floorNum = 1)
+activate ECS
+deactivateafter ECS
+elevators->doors: open()
+activate doors
+deactivateafter doors
+
+
+
+
+activate elevators
+elevators->displays: evacInstructions()
+activate displays
+deactivateafter displays
+elevators->audios: evacInstructions()
+activate audios
+deactivateafter audios
+deactivate elevators
+
+
